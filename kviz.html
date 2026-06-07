@@ -1,0 +1,3062 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zvanična priprema za maturu</title>
+    <style>
+        /* --- OPŠTI STIL (Inspirisan testom) --- */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+            margin: 0;
+            padding: 50px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            padding: 40px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: #000000;
+            font-weight: 800;
+        }
+
+        .instruction-bar {
+            background-color: #d1d5db; 
+            padding: 14px 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-top: 3px solid #000000;
+            border-bottom: 3px solid #000000;
+            margin-bottom: 40px;
+        }
+
+        /* --- STILOVI ZA POČETNU STRANICU --- */
+        .subjects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-top: 1px solid #000000;
+            padding-top: 25px;
+        }
+
+        .subject-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .subject-content {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            flex-grow: 1;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+
+        .subject-number {
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+
+        .subject-badge {
+            background-color: #e5e7eb;
+            width: 50px;
+            align-self: stretch;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            border-left: 1px solid #d1d5db;
+            color: #4b5563;
+            transition: all 0.2s ease;
+        }
+
+        .subject-card:hover {
+            border-color: #9ca3af;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+        }
+
+        .subject-card:hover .subject-content {
+            background-color: #fef08a; /* Marker žuta */
+        }
+
+        .subject-card:hover .subject-badge {
+            background-color: #d1d5db;
+            color: #000000;
+        }
+
+        /* --- STILOVI ZA STRANICU KVIZA --- */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .score-box {
+            font-weight: bold;
+            font-size: 16px;
+            background-color: #e5e7eb;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* --- TIP 1: Zaokruživanje --- */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .option-item:hover:not(.disabled) {
+            background-color: #fef08a;
+        }
+        .option-item input {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+
+        /* --- TIP 2: Povezivanje --- */
+        .matching-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            margin-top: 20px;
+        }
+        .matching-column {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .match-item {
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            background-color: #ffffff;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .match-item.selected {
+            background-color: #bfdbfe;
+            border-color: #3b82f6;
+        }
+
+        /* --- TIP 3: Dopuna --- */
+        .fill-container {
+            font-size: 18px;
+            line-height: 2;
+        }
+        .fill-input {
+            border: none;
+            border-bottom: 2px solid #000000;
+            font-size: 18px;
+            padding: 2px 8px;
+            width: 170px;
+            text-align: center;
+            outline: none;
+            background-color: transparent;
+        }
+        .correct-answer-text {
+            color: #10b981;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        /* --- DRŽAVNE KLASE ZA PROVERU --- */
+        .correct-bg { background-color: #d1fae5 !important; border-color: #10b981 !important; }
+        .wrong-bg { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
+        
+        .pair-color-1 { background-color: #e0f2fe !important; border-color: #0284c7 !important; }
+        .pair-color-2 { background-color: #fef3c7 !important; border-color: #d97706 !important; }
+        .pair-color-3 { background-color: #f3e8ff !important; border-color: #7c3aed !important; }
+
+        .disabled { pointer-events: none; }
+
+        /* --- AKCIJSKA DUGMAD --- */
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 40px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+        }
+        .btn {
+            padding: 12px 25px;
+            font-size: 15px;
+            font-weight: bold;
+            border: 2px solid #000000;
+            background-color: #ffffff;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+        .btn:hover:not(:disabled) {
+            background-color: #000000;
+            color: #ffffff;
+        }
+        .btn:disabled {
+            border-color: #d1d5db;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
+
+    <script defer>
+      // --- BAZE PODATAKA ZA SVA TRI PREDMETA (PRAZNE ZA VAŠ UNOS) ---
+const databases = {
+    programiranje: [
+        
+    ],
+    baze: [
+        {
+            type: "choice",
+            text: "208. Међу понуђеним ентитетима, одредити ентитет са атрибутима који НИСУ одговарајући. Заокружити број испред траженог одговора:",
+            options: [
+                "1.  Ентитет: СТУДЕНТ – Атрибути: име, презиме, смер, број бодова, просек",
+                "2.  Ентитет: ДРЖАВА – Атрибути: назив, број становника, површина",
+                "3.  Ентитет: КЊИГА – Атрибути: наслов, аутор, година издања, издавач, адреса издавача, телефон издавача",
+                "4.  Ентитет: АВИОН – Атрибути: произвођач, марка, година производње, број седишта"
+            ],
+            correct: 2, // Индекс 2 је трећи одговор (Књига)
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "209. Заокружите тачан исказ:",
+            options: [
+                "1.  Примарни кључ је атрибут који мора бити целобројног типа.",
+                "2.  Примарни кључ је атрибут који указује на зависност од неке друге табеле.",
+                "3.  Примарни кључ је атрибут који јединствено идетификује врсте у табели.",
+                "4.  Ако табела садржи вишевредносни атрибут, њему се додељује функција примарног кључа."
+            ],
+            correct: 2, // Индекс 2 је трећи одговор (јединствено идентификује врсте)
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "210. Заокружити број испред траженог одговора. Одредити оператор који би требало користити у WHERE клаузули SELECT наредбе да би били приказани само они ученици чије презиме почиње словом А:",
+            options: [
+                "1.  IN",
+                "2.  LIKE",
+                "3.  BETWEEN",
+                "4.  IS LIKE",
+                "5.  BEGINS WITH"
+            ],
+            correct: 1, // Индекс 1 је други одговор (LIKE)
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "211. Заокружити број испред траженог одговора. Табела UCENICI поред осталих података, садржи и вредност стипендије. Одредити оператор који треба употребити у WHERE клаузули SELECT наредбе да би били приказани сви ученици код којих није позната и није унета вредност у колону stipendija:",
+            options: [
+                "1.  =NULL",
+                "2.  ISNULL",
+                "3.  ==NULL",
+                "4.  IS NULL",
+                "5.  LIKE NULL"
+            ],
+            correct: 3, // Индекс 3 је четврти одговор (IS NULL)
+            points: 1
+        }, 
+        {
+            type: "choice",
+            text: `212. Дат је упит:<br><br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.5; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">SELECT</span> *<br>                <span style="color: #2563eb;">FROM</span> ucenici<br>                <span style="color: #2563eb;">WHERE</span> odeljenje=4 <span style="color: #ec4899;">OR</span> odeljenje=7 <span style="color: #ec4899;">OR</span> odeljenje=10
+            </div>
+            Заокружити оператор који треба користити у датом упиту да би се избегло вишеструко коришћење оператора OR:`,
+            options: [
+                "1.  LIKE",
+                "2.  BETWEEN",
+                "3.  AND",
+                "4.  IN"
+            ],
+            correct: 3,
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "213. Заокруживањем редног броја обележити клаузулу коју је потребно користи уколико листа иза резервисане речи SELECT садржи агрегатну функцију и једну или више колона које нису део агрегатне функције:",
+            options: [
+                "1.  HAVING клаузулу",
+                "2.  GROUP BY клаузулу",
+                "3.  JOIN клаузулу",
+                "4.  ORDER BY клаузулу"
+            ],
+            correct: 1, // Индекс 1 је други одговор (GROUP BY клаузулу)
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "214. Заокружити тачан исказ:",
+            options: [
+                "1.  Кардиналност неке везе представља однос броја објеката који се повезују.",
+                "2.  Кардиналност неке везе представља апстракцију у којој се скуп сличних типова објеката представља општим генеричким типом (надтипом).",
+                "3.  Кардиналност неке везе одређује опционалност учешћа у вези.",
+                "4.  Кардиналност показује колико кандидата за примарни кључ има неки тип ентитета."
+            ],
+            correct: 0, // Индекс 0 је први одговор (однос броја објеката...)
+            points: 2
+        },
+        {
+            type: "choice",
+            text: `215. Дата је табела <strong>PROJEKAT</strong> над којом се извршава упит:<br><br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.5; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">ALTER TABLE</span> PROJEKAT <span style="color: #2563eb;">ADD</span> RokKraj <span style="color: #ec4899;">date</span>
+            </div>
+            Одредити шта ће се десити након извршења упита. Заокружити број испред траженог одговора.`,
+            options: [
+                "1.  у табелу PROJEKAT додаје се ограничење RokKraj",
+                "2.  у табелу PROJEKAT додаје се колона RokKraj",
+                "3.  у табелу PROJEKAT биће преименована колона",
+                "4.  у базу података додаје се табела PROJEKAT са само једном колоном",
+                "5.  у табелу PROJEKAT промениће се тип података у колони RokKraj"
+            ],
+            correct: 1,
+            points: 2
+        },
+        {
+            type: "choice",
+            text: `216. Дата је табела <strong>RADNIK</strong> и упит:<br><br>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-family: Arial, sans-serif; font-size: 14px;">
+                <thead>
+                    <tr style="background-color: #f3f4f6;">
+                        <th style="border: 1px solid #000000; padding: 6px; text-align: left;">IDBR</th>
+                        <th style="border: 1px solid #000000; padding: 6px; text-align: left;">IME</th>
+                        <th style="border: 1px solid #000000; padding: 6px; text-align: left;">PREZIME</th>
+                        <th style="border: 1px solid #000000; padding: 6px; text-align: left;">PLATA</th>
+                        <th style="border: 1px solid #000000; padding: 6px; text-align: left;">PREMIJA</th>
+                        <th style="border: 1px solid #000000; padding: 6px; text-align: left;">DATZAP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid #000000; padding: 6px;">6234</td>
+                        <td style="border: 1px solid #000000; padding: 6px;">Marko</td>
+                        <td style="border: 1px solid #000000; padding: 6px;">Pavlović</td>
+                        <td style="border: 1px solid #000000; padding: 6px;">1300</td>
+                        <td style="border: 1px solid #000000; padding: 6px;">3000</td>
+                        <td style="border: 1px solid #000000; padding: 6px;">1990-12-17</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000000; padding: 6px;">6789</td>
+                        <td style="border: 1px solid #000000; padding: 6px;">Janko</td>
+                        <td style="border: 1px solid #000000; padding: 6px;">Nikolić</td>
+                        <td style="border: 1px solid #000000; padding: 6px;">3900</td>
+                        <td style="border: 1px solid #000000; padding: 6px;">10</td>
+                        <td style="border: 1px solid #000000; padding: 6px;">1999-12-23</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">SELECT</span> Ime, Prezime, <span style="color: #ec4899;">DATEDIFF</span>(<span style="color: #ec4899;">year</span>, DatZap, <span style="color: #ec4899;">GETDATE</span>()) <span style="color: #2563eb;">AS</span> God<br>                <span style="color: #2563eb;">FROM</span> Radnik
+            </div>
+            Одредити шта је резултат упита. Заокружити број испред траженог одговора:`,
+            options: [
+                "1.  Табела са подацима о именима и презименима радника",
+                "2.  Табела са подацима о именима, презименима и броју година које су протекле од датума запослења радника до краја века",
+                "3.  Табела са подацима о именима, презименима и датумима запослења радника",
+                "4.  Табела са подацима о именима, презименима и броју година koje su protekle od datuma zaposlenja radnika do trenutnog datuma"
+            ],
+            correct: 3,
+            points: 2
+        },
+        {
+            type: "choice",
+            text: `217. Дата је табела <strong>RADNIK</strong>, табела <strong>ODELJENJE</strong> и упит:<br><br>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 13px;">
+                <!-- Табела RADNIK -->
+                <table style="border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IDBR</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PREZIME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PLATA</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">BROD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Slobodan</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Golubović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5932</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Mitar</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Gavrilović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">600</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5953</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Persida</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Kosanović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">1100</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">6234</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marko</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Pavlović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">1300</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">6789</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Janko</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Nikolić</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">800</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Табела ODELJENJE -->
+                <table style="border-collapse: collapse; align-self: flex-start;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">BROD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IMEOD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">MESTO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">50</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Skladišta</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Zemun</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marketing</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Vračar</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Plasman</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Surčin</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Direkcija</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Grocka</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">40</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Nabavka</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Barajevo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">SELECT</span> Imeod, <span style="color: #ec4899;">AVG</span>(Plata) <span style="color: #2563eb;">AS</span> ProsekPlata <span style="color: #2563eb;">FROM</span> Radnik, Odeljenje<br>                <span style="color: #2563eb;">WHERE</span> Odeljenje.Brod=Radnik.Brod <span style="color: #2563eb;">GROUP BY</span> Imeod <span style="color: #2563eb;">HAVING</span><br>                <span style="color: #ec4899;">AVG</span>(Plata)&gt;1000
+            </div>
+            Одредити резултат извршавања датог упита. Заокружити број испред траженог одговора:`,
+            options: [
+                "1.  Упит се не извршава зато што груписање мора да се изврши не само по називу одељења, него и по шифри одељења (BrOd)",
+                "2.  Групишу по одељењима радници са платом већом од просечне плате",
+                "3.  Приказују називи одељења и висина просечне плате у њима само за одељења у којима је просечна плата већа од 1000",
+                "4.  Приказују називи одељења и висина просечне плате у њима, при чему се код одређивања просека узимају у обзир само плате веће од 1000"
+            ],
+            correct: 2, // Индекс 2 је трећи одговор
+            points: 2
+        },
+                {
+            type: "choice",
+            text: `218. Дата је табела <strong>RADNIK</strong>, табела <strong>ODELJENJE</strong> и упит:<br><br>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 13px;">
+                <!-- Табела RADNIK -->
+                <table style="border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IDBR</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PREZIME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PLATA</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">BROD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Slobodan</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Golubović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5932</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Mitar</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Gavrilović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">600</td>
+                            <td style="border: 1px solid #000000; padding: 5px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">6234</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marko</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Pavlović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">1300</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">6789</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Janko</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Nikolić</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">800</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Табела ODELJENJE -->
+                <table style="border-collapse: collapse; align-self: flex-start;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">BROD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IMEOD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">MESTO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">50</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Skladišta</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Zemun</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marketing</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Vračar</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Plasman</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Surčin</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Direkcija</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Grocka</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">SELECT</span> Odeljenje.Imeod, Radnik.Ime+<span style="color: #ec4899;">' '</span>+Radnik.Prezme <span style="color: #2563eb;">as</span> PunoIme<br>                <span style="color: #2563eb;">FROM</span> Odeljenje <span style="color: #2563eb;">LEFT JOIN</span> Radnik <span style="color: #2563eb;">ON</span> Radnik.Brod = Odeljenje.Brod
+            </div>
+            Одредити шта се види као резултат датог упита. Заокружити број испред траженог одговора:`,
+            options: [
+                "1.  Називи свих одељења – и оних у којима има радника и оних где нико није распоређен - са бројем радника у сваком одељењу",
+                "2.  За сваког распоређеног радника приказује се по један ред са називом одељења и пуним именом радника, док се за раднике који нису распоређени приказује само пуно име радника",
+                "3.  Приказује се по један ред за сваког распоређеног радника са називом одељења и пуним именом радника. За раднике који нису распоређени, као и за одељења у која нико није распоређен, не формирају се редови у резултатујућој табели",
+                "4.  За свако одељење се приказује онолико редова колико радника ради у том одељењу, док се за одељења у којима нико не ради приказује по један ред са називом одељења"
+            ],
+            correct: 3, // Индекс 3 је четврти одговор
+            points: 2
+        },
+                {
+            type: "choice",
+            text: `219. Дата је табела <strong>RADNIK</strong>, табела <strong>ODELJENJE</strong> и упит:<br><br>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 13px;">
+                <!-- Табела RADNIK -->
+                <table style="border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IDBR</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PREZIME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PLATA</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">BROD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Slobodan</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Golubović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5932</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Mitar</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Gavrilović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">600</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5953</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Persida</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Kosanović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">1100</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">6234</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marko</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Pavlović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">1300</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">6789</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Janko</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Nikolić</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">800</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Табела ODELJENJE -->
+                <table style="border-collapse: collapse; align-self: flex-start;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">BROD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IMEOD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">MESTO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">50</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Skladišta</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Zemun</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marketing</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Vračar</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Plasman</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Surčin</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Direkcija</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Grocka</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">40</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Nabavka</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Barajevo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">SELECT</span> Odeljenje.Brod, Odeljenje.Imeod, <span style="color: #ec4899;">COUNT</span>(*)<br>                <span style="color: #2563eb;">FROM</span> Radnik <span style="color: #2563eb;">INNER JOIN</span> Odeljenje <span style="color: #2563eb;">ON</span> Radnik.Brod = Odeljenje.Brod<br>                <span style="color: #2563eb;">GROUP BY</span> Odeljenje.Brod, Odeljenje.Imeod
+            </div>
+            Одредити приказ који је резултат датог упита. Заокружити број испред траженог одговора:`,
+            options: [
+                "1.  Бројева и назива свих одељења",
+                "2.  Бројева и назива свих одељења са бројем радника у њима",
+                "3.  Бројева и назива одељења у којима има радника са бројем радника у њима",
+                "4.  Бројева i назива одељења у којима нема радника"
+            ],
+            correct: 2, // Индекс 2 је трећи одговор
+            points: 2
+        },
+                {
+            type: "choice",
+            text: `220. Извршава се следећа SELECT наредба:<br><br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">SELECT</span> <span style="color: #ec4899;">MIN</span>(Datum_Zaposlenja), Odsek_Id<br>                <span style="color: #2563eb;">FROM</span> Zaposleni<br>                <span style="color: #2563eb;">GROUP BY</span> Odsek_Id
+            </div>
+            Заокруживањем броја испред одговарајућег исказа, одредити које ће вредности бити приказане:`,
+            options: [
+                "1.  Најранији датум запослења за сваки одсек предузећа.",
+                "2.  Најранији датум запослења у целом предузећу.",
+                "3.  Датум запослења последњег запосленог радника у целом предузећу.",
+                "4.  Датум запослења последњег запосленог радника за сваки одсек.",
+                "5.  Датум запослења најстаријег запосленог радника у сваком одсеку предузећа."
+            ],
+            correct: 0, // Индекс 0 је први одговор
+            points: 2
+        },
+                {
+            type: "choice",
+            text: `221. Потребно је креирати извештај који приказује имена свих производа чија је цена већа од просечне цене свих производа.<br><br>
+            Заокружити број испред упита који одговара постављеном задатку:<br><br>
+            
+            <div style="font-family: monospace; font-size: 14px; font-weight: bold; line-height: 1.5; margin-left: 20px;">
+                <!-- Опција 1 -->
+                <strong>1.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> naziv<br>
+                    <span style="color: #2563eb;">FROM</span> proizvod<br>
+                    <span style="color: #2563eb;">WHERE</span> cena &gt; (<span style="color: #2563eb;">SELECT</span> <span style="color: #ec4899;">AVG</span>(cena) <span style="color: #2563eb;">FROM</span> proizvod)
+                </div>
+
+                <!-- Опција 2 -->
+                <strong>2.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> naziv<br>
+                    <span style="color: #2563eb;">FROM</span> proizvod<br>
+                    <span style="color: #2563eb;">WHERE</span> cena &gt; <span style="color: #ec4899;">AVG</span>(cena)
+                </div>
+
+                <!-- Опција 3 -->
+                <strong>3.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> naziv<br>
+                    <span style="color: #2563eb;">FROM</span> proizvod<br>
+                    <span style="color: #2563eb;">GROUP BY</span> naziv<br>
+                    <span style="color: #2563eb;">HAVING</span> cena &gt; <span style="color: #ec4899;">AVG</span>(cena)
+                </div>
+
+                <!-- Опција 4 -->
+                <strong>4.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> naziv<br>
+                    <span style="color: #2563eb;">FROM</span> (<span style="color: #2563eb;">SELECT</span> <span style="color: #ec4899;">AVG</span>(cena) <span style="color: #2563eb;">FROM</span> proizvod)<br>
+                    <span style="color: #2563eb;">WHERE</span> cena &gt; <span style="color: #ec4899;">AVG</span>(cena)
+                </div>
+            </div>`,
+            options: [
+                "Упит под бројем 1",
+                "Упит под бројем 2",
+                "Упит под бројем 3",
+                "Упит под бројем 4"
+            ],
+            correct: 0, // Први упит је тачан
+            points: 2
+        },
+
+        {
+            type: "choice",
+            text: `222. Извршава се упит:<br><br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">SELECT</span> prezime, ime, email<br>                <span style="color: #2563eb;">FROM</span> ucenik<br>                <span style="color: #2563eb;">ORDER BY</span> prezime<br>                <span style="color: #2563eb;">WHERE</span> prosek&gt;=4.50
+            </div>
+            Наредба се неће извршити. Заокружити број испред разлога услед кога се наредба неће извршити:`,
+            options: [
+                "1.  Наредба се неће извршити једино ако нема ни једног одличног ученика.",
+                "2.  Услов треба написати у HAVING клаузули",
+                "3.  Потребно је назначити редослед сортирања (asc, desc).",
+                "4.  Потребно је променити редослед клаузула."
+            ],
+            correct: 3, // Индекс 3 је четврти одговор
+            points: 2
+        },
+        {
+            type: "choice",
+            text: `223. Табела <strong>ARTIKLI</strong> садржи следеће колоне: <em>artikl_id, naziv, kategorija, cena, kolicina</em>.<br><br>
+            Потребно је да се прикаже категорија и минимална цена артикла у свакој категорији. При томе се тражи приказ само оних категорија где је најмања цена производа већа од задате граничне вредности која се преноси упиту кроз параметар @granica<br><br>
+            Изабрати упит који даје тражени извештај:<br><br>
+            
+            <div style="font-family: monospace; font-size: 14px; font-weight: bold; line-height: 1.5; margin-left: 20px;">
+                <!-- Опција 1 -->
+                <strong>1.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> kategorija, <span style="color: #ec4899;">MIN</span>(cena)<br>
+                    <span style="color: #2563eb;">FROM</span> artikli<br>
+                    <span style="color: #2563eb;">WHERE</span> <span style="color: #ec4899;">MIN</span>(cena)&gt;@granica<br>
+                    <span style="color: #2563eb;">GROUP BY</span> cena
+                </div>
+
+                <!-- Опција 2 -->
+                <strong>2.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> kategorija, <span style="color: #ec4899;">MIN</span>(cena)<br>
+                    <span style="color: #2563eb;">FROM</span> artikli<br>
+                    <span style="color: #2563eb;">GROUP BY</span> kategorija<br>
+                    <span style="color: #2563eb;">HAVING</span> <span style="color: #ec4899;">MIN</span>(cena)&gt;@granica
+                </div>
+
+                <!-- Опција 3 -->
+                <strong>3.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> kategorija, <span style="color: #ec4899;">MIN</span>(cena)<br>
+                    <span style="color: #2563eb;">FROM</span> artikli<br>
+                    <span style="color: #2563eb;">GROUP BY</span> <span style="color: #ec4899;">MIN</span>(cena), kategorija<br>
+                    <span style="color: #2563eb;">HAVING</span> <span style="color: #ec4899;">MIN</span>(cena)&gt;@granica
+                </div>
+
+                <!-- Опција 4 -->
+                <strong>4.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> kategorija, <span style="color: #ec4899;">MIN</span>(cena)<br>
+                    <span style="color: #2563eb;">FROM</span> artikli<br>
+                    <span style="color: #2563eb;">WHERE</span> <span style="color: #ec4899;">MIN</span>(cena)&gt;@granica<br>
+                    <span style="color: #2563eb;">GROUP BY</span> kategorija
+                </div>
+            </div>`,
+            options: [
+                "Упит под бројем 1",
+                "Упит под бројем 2",
+                "Упит под бројем 3",
+                "Упит под бројем 4"
+            ],
+            correct: 1, // Индекс 1 је други упит (тачан одговор)
+            points: 2
+        },
+        {
+            type: "choice",
+            text: `224. Табела <strong>RADIONICA</strong> садржи следеће колоне: <em>radionica_id, naziv, zanat, lokacija_id</em>.<br><br>
+            Потребно је да се прикаже колико на свакој локацији има различитих заната. Заокружити број испред упита који даје тражени извештај:<br><br>
+            
+            <div style="font-family: monospace; font-size: 14px; font-weight: bold; line-height: 1.5; margin-left: 20px;">
+                <!-- Опција 1 -->
+                <strong>1.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT DISTINCT</span> location_id, <span style="color: #ec4899;">COUNT</span>(zanat)<br>
+                    <span style="color: #2563eb;">FROM</span> radionica<br>
+                    <span style="color: #2563eb;">GROUP BY</span> lokacija_id
+                </div>
+
+                <!-- Опција 2 -->
+                <strong>2.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> location_id, <span style="color: #ec4899;">COUNT</span>(zanat)<br>
+                    <span style="color: #2563eb;">FROM</span> radionica<br>
+                    <span style="color: #2563eb;">GROUP BY</span> lokacija_id
+                </div>
+
+                <!-- Опција 3 -->
+                <strong>3.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> location_id, <span style="color: #ec4899;">COUNT</span>(<span style="color: #2563eb;">DISTINCT</span> zanat)<br>
+                    <span style="color: #2563eb;">FROM</span> radionica<br>
+                    <span style="color: #2563eb;">GROUP BY</span> lokacija_id
+                </div>
+
+                <!-- Опција 4 -->
+                <strong>4.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">SELECT</span> location_id, <span style="color: #ec4899;">COUNT</span>(<span style="color: #2563eb;">DISTINCT</span> zanat)<br>
+                    <span style="color: #2563eb;">FROM</span> radionica<br>
+                    <span style="color: #2563eb;">GROUP BY</span> zanat
+                </div>
+            </div>`,
+            options: [
+                "Упит под бројем 1",
+                "Упит под бројем 2",
+                "Упит под бројем 3",
+                "Упит под бројем 4"
+            ],
+            correct: 2, // Индекс 2 је трећи упит (тачан одговор)
+            points: 2
+        },
+        {
+            type: "choice",
+            text: `225. Заокружити број испред одговора који представља наставак датог исказа:<br><br>
+            Уколико поглед (view) треба користити за измену података у табели, поглед <u><strong>НЕ СМЕ</strong></u> садржати...`,
+            options: [
+                "1.  WHERE клаузулу",
+                "2.  Спој више табела",
+                "3.  Алијас колоне",
+                "4.  GROUP BY клаузулу"
+            ],
+            correct: 3, // Индекс 3 је четврти одговор (тачан одговор)
+            points: 2
+        },
+        {
+            type: "choice",
+            text: `226. Дат је упит за креирање погледа и наведени искази који се односе на дати упит. Заокружити број испред тачног исказа:<br><br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">CREATE VIEW</span> Pregled_Proseka <span style="color: #2563eb;">AS</span><br>                <span style="color: #2563eb;">SELECT</span> UcenikID, Ime, Prezime, <span style="color: #ec4899;">AVG</span>(Ocena) <span style="color: #2563eb;">AS</span> Prosek <span style="color: #2563eb;">FROM</span> Testovi<br>                <span style="color: #2563eb;">WHERE</span> OdeljenjeID <span style="color: #2563eb;">IN</span> (1, 2, 3, 4)<br>                <span style="color: #2563eb;">GROUP BY</span> UcenikID, Ime, Prezime
+            </div>`,
+            options: [
+                "1.  Подаци у табели Testovi се могу модификовати коришћењем погледа Pregled_Proseka",
+                "2.  Коришћењем датог погледа, подаци се могу само у додавати у табелу Testovi, али не и мењати",
+                "3.  Овако дат упит изазива грешку при извршењу",
+                "4.  Коришћењем датог погледа, подаци из табеле Testovi се могу само прегледавати, али не и додавати или мењати"
+            ],
+            correct: 3, // Индекс 3 је четврти одговор
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `У следећим задацима заокружите бројеве испред тражених одговора<br><br>
+            227. Заокружити бројеве испред тражених одговора. Међу понуђеним алатима, обележити Case алате:`,
+            options: [
+                "1.  Rational Rose",
+                "2.  Oracle Designer",
+                "3.  .NET",
+                "4.  Microsoft Visio",
+                "5.  Java",
+                "6.  SQL Express"
+            ],
+            correct: [0, 1, 3], // Означене опције 1, 2 и 4 (Rational Rose, Oracle Designer, Microsoft Visio)
+            points: 1.5
+        },
+        {
+            type: "multiple",
+            text: `228. Обележити команде које се сматрају командама ажурирања података у бази података. Заокружити бројеве испред тражених одговора:`,
+            options: [
+                "1.  Организовање података",
+                "2.  Додавање нових података",
+                "3.  Брисање старих података",
+                "4.  Враћање оштећених података у коректно стање",
+                "5.  Измена постојећих података",
+                "6.  Додела права приступа подацима",
+                "7.  Измена структуре постојећих табела у бази"
+            ],
+            correct: [1, 2, 4], // Означене опције 2, 3 и 5 (Додавање нових, Брисање старих, Измена постојећих података)
+            points: 1.5
+        },
+                {
+            type: "multiple",
+            text: `229. Заокружити бројеве испред тражених одговора.<br><br>
+            За упите са специфицираним редоследом приказа врста у резултатујућој табели користи се клаузула ORDER BY после које се наводи назив колоне:`,
+            options: [
+                "1.  и службена реч ASC за растући редослед",
+                "2.  и службена реч DESC за опадајући редослед",
+                "3.  и службена реч ASC за опадајући редослед",
+                "4.  и службена реч DESC за растући редослед",
+                "5.  службена реч се може изоставити при чему се добија растући поредак",
+                "6.  службена реч се може изоставити при чему се добија опадајући поредак"
+            ],
+            correct: [0, 1, 4], // Означене опције 1, 2 и 5
+            points: 1.5
+        },
+                {
+            type: "multiple",
+            text: `230. Заокружити бројеве испред наредби које служе за креирање, брисање и измену структуре релационе базе и објеката који чине релациону базу:`,
+            options: [
+                "1.  ALTER TABLE",
+                "2.  INSERT",
+                "3.  CREATE TABLE",
+                "4.  DROP TABLE",
+                "5.  UPDATE",
+                "6.  DELETE TABLE",
+                "7.  ADD COLUMN",
+                "8.  ADD CONSTRAINT"
+            ],
+            correct: [0, 2, 3], // Опције 1, 3 и 4
+            points: 1.5
+        },
+        {
+            type: "multiple",
+            text: `231. Заокружити бројеве испред тражених одговора.<br><br>
+            Одредити ентитете који садрже одговарајуће атрибуте:`,
+            options: [
+                "1.  Ентитет: КЊИГА – Атрибути: наслов, аутор, издавач, година издања",
+                "2.  Ентитет: АУТОМОБИЛ – Атрибути: марка, година производње, боја, власник, година рођења власника, регистарски број",
+                "3.  Ентитет: УЧЕНИК – Атрибути: име, презиме, разред, одељење, број оправданих, број неоправданих, просек",
+                "4.  Ентитет: ДРЖАВА – Атрибути: назив, број становника, површина, главни град, број становника главног града, име градоначелника главног града"
+            ],
+            correct: [0, 2], // Опције 1 и 3
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `232. Дати су искази који се односе на спољашњи кључ табеле (foreign key constraint). Заокружити бројеве испред ТАЧНИХ исказа:`,
+            options: [
+                "1.  Вредност у пољу спољашњег кључа не сме бити NULL",
+                "2.  Вредност спољашњег кључа мора бити јединствена (unique) у колони над којом је постављено ограничење спољашњег кључа",
+                "3.  Вредност у пољу спољашњег кључа мора бити или NULL или једнака некој од вредности из колоне на коју спољашњи кључ референцира",
+                "4.  Више редова у табели може садржати исту вредност у пољу спољашњег кључа и тиме показивати на исти ред у референцираној табели",
+                "5.  Колона спољашњег кључа не мора садржати исти тип података као колона на коју спољашњи кључ референцира"
+            ],
+            correct: [2, 3], // Опције 3 i 4
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `233. Заокружити бројеве испред тражених одговора.<br><br>
+            Означити операторе који се <u><strong>НЕ МОГУ</strong></u> користити за поређење са подупитом који враћа више вредности:`,
+            options: [
+                "1.  ALL",
+                "2.  ANY",
+                "3.  BETWEEN",
+                "4.  SOME",
+                "5.  LIKE",
+                "6.  IN"
+            ],
+            correct: [2, 4], // Опције 3 и 5
+            points: 2
+        },
+                {
+            type: "multiple",
+            text: `234. Дата је табела <strong>Kupci</strong> са структуром:<br>
+            <div style="background-color: #ffffff; padding: 5px 10px; font-family: monospace; font-size: 14px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; white-space: pre-wrap; margin-left: 20px;">
+                ( Id <span style="color: #2563eb;">int</span> <span style="color: #2563eb;">primary key</span>, Prezime <span style="color: #2563eb;">varchar</span>(50), Adresa <span style="color: #2563eb;">varchar</span>(50), Mesto <span style="color: #2563eb;">varchar</span>(20), Telefon <span style="color: #2563eb;">varchar</span>(5), Status <span style="color: #2563eb;">varchar</span>(8) )
+            </div>
+            И табела <strong>NoviKupci</strong> са структуром:<br>
+            <div style="background-color: #ffffff; padding: 5px 10px; font-family: monospace; font-size: 14px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; white-space: pre-wrap; margin-left: 20px;">
+                ( Id <span style="color: #2563eb;">int</span> <span style="color: #2563eb;">primary key</span>, Prezime <span style="color: #2563eb;">varchar</span>(50), Telefon <span style="color: #2563eb;">varchar</span>(20), Status <span style="color: #2563eb;">varchar</span>(8) )
+            </div>
+            Извршава се упит:<br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.5; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">INSERT INTO</span> NoviKupci<br><span style="color: #2563eb;">SELECT</span> * <span style="color: #2563eb;">FROM</span> Kupci <span style="color: #2563eb;">WHERE</span> Status &lt;&gt; <span style="color: #ec4899;">'Aktivan'</span>
+            </div>
+            Одредити шта је резултат извршења датог упита. Заокружити број испред траженог одговора:`,
+            options: [
+                "1.  Како табела NoviKupci има све колоне које постоје и у табели Kupci, упит се извршава без грешке и у табелу NoviKupci се уписују записи из табеле Kupci са статусом који није Aktivan",
+                "2.  Упит се не извршава, пријављује грешку јер се број колона у табели Kupci разликује од броја колона у табели NoviKupci",
+                "3.  Упит би се извршио без грешке да су у SELECT клаузули подупита, уместо * наведене све колоне табеле Kupci које имају своју одговарајућу колону у табели NoviKupci",
+                "4.  Упит јавља грешку због покушаја уписа вредности у поље примарног кључа који је аутоматски, тј. креира га сама база"
+            ],
+            correct: [1, 2], // Идекси 1 и 2 одговарају опцијама 2 и 3
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `235. Дата је табела <strong>RADNIK</strong>, табела <strong>ODELJENJE</strong> и упит:<br><br>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 13px;">
+                <!-- Табела RADNIK -->
+                <table style="border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IDBR</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PREZIME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PLATA</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">SIFRAOD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Slobodan</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Golubović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5932</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Mitar</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Gavrilović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">600</td>
+                            <td style="border: 1px solid #000000; padding: 5px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5953</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Persida</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Kosanović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">1100</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Табела ODELJENJE -->
+                <table style="border-collapse: collapse; align-self: flex-start;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">SIFRAOD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IMEOD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">MESTO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marketing</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Vračar</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Direkcija</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Grocka</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Nabavka</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Barajevo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            Креирана је ускладиштена процедура са параметром @br <span style="color: #2563eb;">int</span> = <span style="color: #ec4899;">NULL</span><br>
+            Позивом процедуре извршава се упит:<br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">UPDATE</span> Radnik <span style="color: #2563eb;">SET</span> Radnik.SifraOD = 30<br>                <span style="color: #2563eb;">WHERE</span> Radnik.SifraOD=@br <span style="color: #2563eb;">or</span> @br <span style="color: #ec4899;">IS NULL</span>
+            </div>
+            Одредити који од понуђених исказа су тачни. Заокружити бројеве испред тражених одговора:`,
+            options: [
+                "1.  Сви радници који раде у одељењу са шифром једнакој вредности која је пренета кроз параметар @br, биће прераспоређени у одељење чија је шифра 30",
+                "2.  Упит распоређује све нераспоређене раднике у одељење са шифром 30",
+                "3.  Уколико се параметру @br не пренесе вредност, радници који су до тог момента били нераспоређени, биће распоређени у одељење са шифром 30",
+                "4.  Уколико се параметру @br не пренесе вредност, СВИ радници ће бити прераспоређени у одељење чији је brod 30"
+            ],
+            correct: [0, 3], // Индекси 0 и 3 одговарају опцијама 1 и 4
+            points: 2
+        },
+
+        {
+            type: "multiple",
+            text: `236. Табела <strong>Zaposleni</strong> садржи поља: <em>Zaposleni_Id, Ime, Prezime, Plata, Odsek_Id</em>.<br>
+            Дат је упит:<br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">SELECT</span> Zaposleni_Id, Ime, Prezime<br>                <span style="color: #2563eb;">FROM</span> Zaposleni<br>                <span style="color: #2563eb;">WHERE</span> Plata=(<span style="color: #2563eb;">SELECT</span> <span style="color: #ec4899;">MAX</span>(Plata) <span style="color: #2563eb;">FROM</span> Zaposleni <span style="color: #2563eb;">GROUP BY</span> Odsek_Id)
+            </div>
+            Дати су искази који описују ефекат извршења упита. Заокружити бројеве испред ТАЧНИХ исказа:`,
+            options: [
+                "1.  Упит се не извршава зато што у подупиту није дозвољено коришћење групних функција",
+                "2.  Упит се извршава без грешке и из сваког одељења бира и приказује податке о раднику који има највећу плату у том одељењу.",
+                "3.  Упит се не извршава јер подупит враћа више од једне врсте, а коришћен је оператор за поређење са једном вредношћу.",
+                "4.  Уколико би се изоставила GROUP BY клаузула, упит би се извршавао без грешке и приказао би једног или више радника са платом једнакој највећој плати (без обзира на одељење).",
+                "5.  Како подупит садржи груписање, да би се цео упит извршио без грешке, потребно је услов са подупитом написати у HAVING уместо у WHERE клаузули"
+            ],
+            correct: [2, 3], // Индекси 2 и 3 одговарају опцијама 3 и 4
+            points: 2
+        },
+                {
+            type: "multiple",
+            text: `237. Заокружити бројеве под којима су наведене клаузуле SQL наредбе у којима се могу користити аритметичке операције:`,
+            options: [
+                "1.  SELECT",
+                "2.  FROM",
+                "3.  WHERE",
+                "4.  ORDER BY"
+            ],
+            correct: [1, 3, 4], // Опције 1, 3 и 4
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `238. Извршава се следећи упит:<br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">SELECT</span> cena<br>                <span style="color: #2563eb;">FROM</span> proizvod<br>                <span style="color: #2563eb;">WHERE</span> cena <span style="color: #2563eb;">IN</span> (101, 125, 150, 350)<br>                <span style="color: #ec4899;">AND</span> (cena <span style="color: #2563eb;">BETWEEN</span> 125 <span style="color: #ec4899;">AND</span> 140 <span style="color: #ec4899;">OR</span> cena &gt; 150)
+            </div>
+            Одредити које две вредности може вратити ова наредба. Заокружити бројеве испред тражених вредности:`,
+            options: [
+                "1.  101",
+                "2.  150",
+                "3.  125",
+                "4.  110",
+                "5.  350"
+            ],
+            correct: [2, 4], // Опције 3 и 5
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `239. Заокружити бројеве испред команди које се могу користити за ажурирање постојећих података у бази:`,
+            options: [
+                "1.  DELETE",
+                "2.  MERGE",
+                "3.  SELECT",
+                "4.  UPDATE"
+            ],
+            correct: [0, 3], // Oпције 1 и 4
+            points: 2
+        },
+                {
+            type: "multiple",
+            text: `240. Креиране су табеле <strong>SKOLA</strong> и <strong>OSNOVNASKOLA</strong>, а затим су у табелу <strong>SKOLA</strong> уписани подаци извршавањем следећих наредби:<br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 14px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; white-space: pre-wrap; margin-left: 20px;">
+<span style="color: #2563eb;">create table</span> Skola(<br>    skolaID <span style="color: #2563eb;">int</span> <span style="color: #2563eb;">primary key</span>, Naziv <span style="color: #2563eb;">nvarchar</span>(50), gradID <span style="color: #2563eb;">int</span>, tip <span style="color: #2563eb;">nvarchar</span>(50) )<br><span style="color: #2563eb;">create table</span> OsnovnaSkola(<br>    gimID <span style="color: #2563eb;">int</span> <span style="color: #2563eb;">primary key</span>, Naziv <span style="color: #2563eb;">nvarchar</span>(50), gradID <span style="color: #2563eb;">int</span> )<br><br><span style="color: #2563eb;">insert into</span> Skola <span style="color: #2563eb;">values</span> (101, <span style="color: #ec4899;">'Nikola Tesla'</span>, 20, <span style="color: #ec4899;">'srednja strucna'</span>)<br><span style="color: #2563eb;">insert into</span> Skola <span style="color: #2563eb;">values</span> (102, <span style="color: #ec4899;">'Dusko Radovic'</span>, 20, <span style="color: #ec4899;">'osnovna'</span>)<br><span style="color: #2563eb;">insert into</span> Skola <span style="color: #2563eb;">values</span> (103, <span style="color: #ec4899;">'Sveti Sava'</span>, 30, <span style="color: #ec4899;">'osnovna'</span>)<br><span style="color: #2563eb;">insert into</span> Skola <span style="color: #2563eb;">values</span> (104, <span style="color: #ec4899;">'Bora Stankovic'</span>, 20, <span style="color: #ec4899;">'gimnazija'</span>)
+            </div>
+            У табелу <strong>OSNOVNASKOLA</strong> треба уписати податке о основним школама преписивањем потребних вредности из табеле <strong>SKOLA</strong>. Заокружити бројеве испред упита који ће јавити грешку при извршењу:<br><br>
+            
+            <div style="font-family: monospace; font-size: 14px; font-weight: bold; line-height: 1.5; margin-left: 20px;">
+                <!-- Опција 1 -->
+                <strong>1.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">select</span> * <span style="color: #2563eb;">into</span> OsnovneSkole<br>
+                    <span style="color: #2563eb;">from</span> Skola <span style="color: #2563eb;">where</span> tip=<span style="color: #ec4899;">'osnovna'</span>
+                </div>
+
+                <!-- Опција 2 -->
+                <strong>2.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">insert into</span> OsnovneSkole<br>
+                    <span style="color: #2563eb;">select</span> * <span style="color: #2563eb;">from</span> Skola <span style="color: #2563eb;">where</span> tip=<span style="color: #ec4899;">'osnovna'</span>
+                </div>
+
+                <!-- Опција 3 -->
+                <strong>3.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">insert into</span> OsnovneSkole(skolaID, Naziv)<br>
+                    <span style="color: #2563eb;">select</span> s.skolaID, s.Naziv <span style="color: #2563eb;">from</span> Skola <span style="color: #2563eb;">as</span> s <span style="color: #2563eb;">where</span> tip=<span style="color: #ec4899;">'osnovna'</span>
+                </div>
+
+                <!-- Опција 4 -->
+                <strong>4.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    <span style="color: #2563eb;">insert into</span> OsnovneSkole<br>
+                    <span style="color: #2563eb;">select</span> s.skolaID, s.Naziv, s.gradID <span style="color: #2563eb;">from</span> Skola <span style="color: #2563eb;">as</span> s <span style="color: #2563eb;">where</span> tip=<span style="color: #ec4899;">'osnovna'</span>
+                </div>
+            </div>`,
+            options: [
+                "Упит под бројем 1",
+                "Упит под бројем 2",
+                "Упит под бројем 3",
+                "Упит под бројем 4"
+            ],
+            correct: [1, 2, 3], // Опције 2, 3 и 4 пријављују грешку
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `241. Креиране су и попуњене подацима табеле <strong>Korisnik</strong> и <strong>Prijatelji</strong>. Њихова структура и садржај приказани су на слици:<br><br>
+            <div style="display: flex; gap: 40px; flex-wrap: wrap; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 13px;">
+                <!-- Табела Korisnik -->
+                <table style="border-collapse: collapse; min-width: 180px;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">ID</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">POL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">1</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Ana</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">NULL</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">2</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Steva</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">m</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">3</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marta</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">z</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">4</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Petra</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">z</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Табела Prijatelji -->
+                <table style="border-collapse: collapse; align-self: flex-start; min-width: 160px;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">Korisnik1</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">Korisnik2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">1</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">2</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">1</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">3</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">2</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            Извршавањем упита добија се табела са подацима.<br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.6; white-space: pre-wrap; margin-left: 20px;">
+<span style="color: #2563eb;">select</span> k.ime, <span style="color: #ec4899;">COUNT</span>(*) <span style="color: #2563eb;">as</span> [broj prijatelja]<br><span style="color: #2563eb;">from</span> Korisnik <span style="color: #2563eb;">as</span> k<br><span style="color: #2563eb;">left join</span> Prijatelji <span style="color: #2563eb;">as</span> p <span style="color: #2563eb;">on</span> p.korisnik1=k.id <span style="color: #ec4899;">or</span> p.korisnik2=k.id<br><span style="color: #2563eb;">where</span> k.pol=<span style="color: #ec4899;">'z'</span><br><span style="color: #2563eb;">group by</span> k.id, k.ime
+            </div>
+            Заокруживањем бројева испред понуђених одговора, обележити који од наведених података ће бити приказани у појединим редовима резултатуће табеле:`,
+            options: [
+                "1.  Ana, 1",
+                "2.  Ana, 2",
+                "3.  Steva, 1",
+                "4.  Steva, 2",
+                "5.  Marta, 1",
+                "6.  Marta, 2",
+                "7.  Petra, 0",
+                "8.  Petra, 1"
+            ],
+            correct: [5, 7], // Индекси 5 и 7 одговарају одговорима под бројем 6 и 8
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `242. Заокружити бројеве испред кључних речи које се НЕ КОРИСТЕ за обележавање ограничења (constraints) у језику SQL:`,
+            options: [
+                "1.  Foreign key",
+                "2.  Unique",
+                "3.  Distinct",
+                "4.  Check",
+                "5.  Convert",
+                "6.  Union",
+                "7.  Not Null",
+                "8.  Except"
+            ],
+            correct: [2, 4, 5, 7], // Опције 3, 5, 6 и 8
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `243. Одредити ентитете који садрже одговарајуће атрибуте. Заокружити бројеве испред тражених одговора:`,
+            options: [
+                "1.  Ентитет: СТУДЕНТ – Атрибути: име, презиме, смер, број бодова, просек",
+                "2.  Ентитет: КЊИГА – Атрибути: наслов, аутор, година издања, издавач, адреса издавача, телефон издавача",
+                "3.  Ентитет: АВИОН – Атрибути: произвођач, марка, година производње, број седишта",
+                "4.  Ентитет: ДРЖАВА – Атрибути: назив, број становника, површина",
+                "5.  Ентитет: САЈАМ – Атрибути: назив, број излагача, покровитељ, адреса покровитеља, контакт особа покровитеља",
+                "6.  Ентитет: ТУРИСТИЧКА АГЕНЦИЈА – Атрибути: назив, адреса, година оснивања, власник, стручна квалификација власника, запослени, стручна квалификација запослених"
+            ],
+            correct: [0, 2, 4], // Опције 1, 3 и 5
+            points: 3
+        },
+        {
+            type: "multiple",
+            text: `244. Обележити ентитете код којих је извршен адекватан избор јединственог идентификатора. Заокружи бројеве испред тражених одговора:`,
+            options: [
+                "1.  јединствени матични број грађанина (ЈМБГ) за ентитет ОСОБА",
+                "2.  датум рођења за ентитет ОСОБА",
+                "3.  ИСБН број за ентитет КЊИГА",
+                "4.  регистарска ознака за АУТОМОБИЛ",
+                "5.  дестинација за ентитет АРАНЖМАН",
+                "6.  режисер за ентитет ФИЛМ"
+            ],
+            correct: [0, 2, 3], // Опције 1, 3 и 4
+            points: 3
+        },
+        {
+            type: "multiple",
+            text: `245. Одредити тачан исказ о оператору ANY који се примењује са подупитом који враћа више вредности:`,
+            options: [
+                "1.  Оператор ANY може да се користи испред кључне речи DISTINCT.",
+                "2.  Оператор ANY врши поређење са свим вредностима које враћа подупит и враћа TRUE ако све вредности подупита задовољавају услов",
+                "3.  Оператор ANY врши поређење са свим вредностима које враћа подупит и враћа TRUE ако било која од вредности подупита задовољава услов",
+                "4.  Оператору ANY може да претходи оператор LIKE или оператор IN.",
+                "5.  Оператору ANY мора да претходи оператор поређења (=, <>, >, >=, <, <=)",
+                "6.  Услов = ANY(скуп вредности) је еквивалентан услову IN (скуп вредности)"
+            ],
+            correct: [2, 4, 5], // Опције 3, 5 и 6
+            points: 3
+        },
+        {
+            type: "multiple",
+            text: `246. Креирана је табела <strong>SKOLA</strong>, а затим су у њу уписани подаци извршавањем следећих наредби:<br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 14px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; white-space: pre-wrap; margin-left: 20px;">
+<span style="color: #2563eb;">create table</span> Skola( skolaID <span style="color: #2563eb;">int</span> <span style="color: #2563eb;">primary key</span>, Naziv <span style="color: #2563eb;">varchar</span>(50) )<br><br><span style="color: #2563eb;">insert into</span> Skola <span style="color: #2563eb;">values</span> (101, <span style="color: #ec4899;">'Nikola Tesla'</span>)<br><span style="color: #2563eb;">insert into</span> Skola <span style="color: #2563eb;">values</span> (102, <span style="color: #ec4899;">'Mihajlo Pupin'</span>)<br><span style="color: #2563eb;">insert into</span> Skola <span style="color: #2563eb;">values</span> (103, <span style="color: #ec4899;">'ETS Zemun'</span>)
+            </div>
+            За дати упит, треба проценити сценарио који ће се десити и заокруживањем редних бројева испред исказа, означити могуће исходе:<br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; line-height: 1.5; white-space: pre-wrap; margin-left: 20px;">
+<span style="color: #2563eb;">select</span> * <span style="color: #2563eb;">into</span> StrucneSkole <span style="color: #2563eb;">from</span> Skola
+            </div>`,
+            options: [
+                "1.  Креира се копија табеле Skola - нова табела под именом StrucneSkole исте структуре као и табела Skola и у њу се преписују сви подаци из табеле Skola",
+                "2.  Уколико табела са именом StrucneSkole постоји у бази, креира се нова са именом StrucneSkole(1) и у њу се преписују сви редови из табеле Skola",
+                "3.  Уколико табела са именом StrucneSkole постоји у бази, не креира се нова, само се у постојећу преписују редови из табеле Skola",
+                "4.  Уколико табела са именом StrucneSkole постоји у бази, упит јавља грешку",
+                "5.  Уколико се дода услов where 1=2 упит се извршава, креира се нова табела исте структуре као и табела Skola, али се у њу не уписује ни један ред",
+                "6.  Уколико се дода услов where 1=2 упит јавља грешку јер је 1=2 увек нетачно тј. False",
+                "7.  Упит јавља грешку јер се кључна реч into користи искључиво у комбинацији са insert"
+            ],
+            correct: [0, 3, 4], // Индекси 0, 3 и 4 одговарају опцијама 1, 4 и 5
+            points: 3
+        },
+                {
+            type: "fill",
+            text: "247. Допунити реченицу наводећи назив нормалне форме:<br><br>Уколико ни један атрибут релације није вишевредносни, нити композитни, тј. не може се раставити, кажемо да је релација у ____________ нормалној форми.",
+            correct: ["првој", "prvoj", "прва", "prva", "1.", "1"],
+            points: 1
+        },
+        {
+            type: "fill",
+            text: "248. Допунити реченицу наводећи назив нормалне форме:<br><br>Уколико сви атрибути релације који нису део кључа зависе од сваког атрибута који је део кључа кажемо да је релација у ____________ нормалној форми.",
+            correct: ["другој", "drugoj", "друга", "druga", "2.", "2"],
+            points: 1
+        },
+        {
+            type: "fill",
+            text: "249. Допунити реченицу наводећи назив нормалне форме:<br><br>Уколико сви некључни (споредни) атрибути релације не зависе од неког другог некључног атрибута, тј. ако не постоји транзитивна зависност било ког споредног атрибута од било ког кључа те релације, кажемо да је релација у ____________ нормалној форми.",
+            correct: ["трећој", "trećoj", "trecoj", "трећа", "treća", "treca", "3.", "3"],
+            points: 1
+        },
+        {
+            type: "matching",
+            text: `250. Написати на цртама испред логичких операција редне бројеве њихових приоритета (1 - највиши приоритет, 2 - средњи приоритет, 3 - најнижи приоритет):`,
+            left: [
+                "1. највиши приоритет",
+                "2. средњи приоритет",
+                "3. најнижи приоритет"
+            ],
+            right: [
+                "OR",
+                "NOT",
+                "AND"
+            ],
+            correctPairs: { 0: 1, 1: 2, 2: 0 }, // 1 иде уз NOT, 2 иде уз AND, 3 иде уз OR
+            points: 1.5
+        },
+                {
+            type: "matching",
+            text: `251. Дата је табела <strong>GEOGRAFIJA</strong> која поред осталих података садржи називе градова и држава (<em>Naziv nvarchar(50)</em>). У зависности од услова у WHERE клаузули, SELECT упитом се приказују географски појмови из табеле. Са леве стране су дати услови нумерисани бројевима од 1 до 5, а са десне групе градова.<br><br>
+            Свакој групи градова придружити по један услов уносом редног броја којим је услов нумерисан на линију испред листе градова:`,
+            left: [
+                `<span style="font-family: monospace; font-weight: bold;"><span style="color: #2563eb;">where</span> Naziv <span style="color: #2563eb;">like</span> <span style="color: #ec4899;">'L_ %'</span></span>`,
+                `<span style="font-family: monospace; font-weight: bold;"><span style="color: #2563eb;">where</span> Naziv <span style="color: #2563eb;">like</span> <span style="color: #ec4899;">'_ %N%'</span></span>`,
+                `<span style="font-family: monospace; font-weight: bold;"><span style="color: #2563eb;">where</span> Naziv <span style="color: #2563eb;">like</span> <span style="color: #ec4899;">'% L%'</span></span>`,
+                `<span style="font-family: monospace; font-weight: bold;"><span style="color: #2563eb;">where</span> Naziv <span style="color: #2563eb;">like</span> <span style="color: #ec4899;">'_L%'</span></span>`,
+                `<span style="font-family: monospace; font-weight: bold;"><span style="color: #2563eb;">where</span> Naziv <span style="color: #2563eb;">like</span> <span style="color: #ec4899;">'_ %A'</span></span>`
+            ],
+            right: [
+                "SIJERA LEONE, SVETA LUCIJA",
+                "LA VALETA, LA KORUNJA",
+                "EL RENO, LA KORUNJA",
+                "EL SALVADOR, EL RENO",
+                "LAS VEGAS, LOS ANGELES"
+            ],
+            correctPairs: { 0: 4, 1: 2, 2: 0, 3: 3, 4: 1 },
+            points: 2.5
+        },
+        {
+            type: "matching",
+            text: `252. Исписати на цртама испред релација редни број под којим је наведена одговарајућа кардиналност везе (1 - 1:1, 2 - 1:M, 3 - M:M):`,
+            left: [
+                "1:1 (веза 1)",
+                "1:M (веза 2)",
+                "M:M (веза 3)"
+            ],
+            right: [
+                "ВЛАСНИК – БРОЈ ТЕЛЕФОНА",
+                "НАСТАВНИК – ПРЕДМЕТ",
+                "ОСОБА – ПАСОШ",
+                "КУПАЦ – МОДЕЛ АУТОМОБИЛА",
+                "УТАКМИЦА – ГРАД ДОМАЋИН"
+            ],
+            // Пажња: Пошто десна страна има 5 ставки, овде дефинишемо који леви тип кардиналности иде на коју десну позицију
+            correctPairs: { 0: 2, 1: 0, 1: 4, 2: 1, 2: 3 }, 
+            points: 2.5
+        },
+        {
+            type: "matching",
+            text: `253. Уписати редни број почев од 1 на линију испред резервисане речи тако да одговара редоследу навођења при формирању упита.<br><br>
+            За формирање упита за издавање дела података из табеле која се налази у оквиру базе података користе се клаузуле у следећем редоследу:`,
+            left: [
+                "1. прва клаузула",
+                "2. друга клаузула",
+                "3. трећа клаузула",
+                "4. четврта клаузула",
+                "5. пета клаузула"
+            ],
+            right: [
+                "GROUP BY",
+                "WHERE",
+                "SELECT",
+                "ORDER BY",
+                "FROM"
+            ],
+            correctPairs: { 0: 2, 1: 4, 2: 1, 3: 0, 4: 3 }, // SELECT(1), FROM(2), WHERE(3), GROUP BY(4), ORDER BY(5)
+            points: 3
+        },
+                {
+            type: "matching",
+            text: `254. Дата је табела <strong>RADNIK</strong>, табела <strong>ODELJENJE</strong> и упит:<br><br>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 13px;">
+                <!-- Табела RADNIK -->
+                <table style="border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IDBR</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PREZIME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PLATA</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">BROD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Slobodan</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Golubović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5932</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Mitar</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Gavrilović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">600</td>
+                            <td style="border: 1px solid #000000; padding: 5px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5953</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Persida</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Kosanović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">1100</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">6234</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marko</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Pavlović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">1300</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">6789</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Janko</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Nikolić</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">800</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Табела ODELJENJE -->
+                <table style="border-collapse: collapse; align-self: flex-start;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">BROD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IMEOD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">MESTO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">50</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Skladišta</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Zemun</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marketing</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Vračar</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Plasman</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Surčin</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Direkcija</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Grocka</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">40</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Nabavka</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Barajevo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            Повезати упите и њихова значења уписом броја упита на одговарајућу линију:`,
+            left: [
+                `<div style="font-family: monospace; font-size: 13px; font-weight: bold; line-height: 1.4; text-align: left;">
+                    <span style="color: #2563eb;">SELECT</span> odeljenje.imeod, radnik.prezime<br>
+                    <span style="color: #2563eb;">FROM</span> odeljenje <span style="color: #9ca3af;">INNER JOIN</span> radnik<br>
+                    <span style="color: #2563eb;">ON</span> radnik.brod = odeljenje.brod
+                </div>`,
+                `<div style="font-family: monospace; font-size: 13px; font-weight: bold; line-height: 1.4; text-align: left;">
+                    <span style="color: #2563eb;">SELECT</span> odeljenje.imeod, radnik.prezime<br>
+                    <span style="color: #2563eb;">FROM</span> odeljenje <span style="color: #9ca3af;">LEFT JOIN</span> radnik<br>
+                    <span style="color: #2563eb;">ON</span> radnik.brod = odeljenje.brod
+                </div>`,
+                `<div style="font-family: monospace; font-size: 13px; font-weight: bold; line-height: 1.4; text-align: left;">
+                    <span style="color: #2563eb;">SELECT</span> odeljenje.imeod, radnik.prezime<br>
+                    <span style="color: #2563eb;">FROM</span> odeljenje <span style="color: #9ca3af;">RIGHT JOIN</span> radnik<br>
+                    <span style="color: #2563eb;">ON</span> radnik.brod = odeljenje.brod
+                </div>`
+            ],
+            right: [
+                "Приказује све раднике (и који јесу и који нису распоређени у одељења) и само она одељења у којима има радника",
+                "Приказује само одељења у којима има радника и само раднике распоређене у одељењима",
+                "Приказује сва одељења (и она у којима има и она у којима нема радника) и само оне раднике који су распоређени у одељења"
+            ],
+            correctPairs: { 0: 1, 1: 2, 2: 0 }, // 1 (INNER) иде уз друго значење, 2 (LEFT) иде уз треће значење, 3 (RIGHT) иде уз прво значење
+            points: 3
+        },
+        {
+            type: "matching",
+            text: `255. Дата је табела <strong>RADNIK</strong>, табела <strong>ODELJENJE</strong> и упит:<br><br>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 13px;">
+                <!-- Табела RADNIK -->
+                <table style="border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IDBR</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PREZIME</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">PLATA</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">BROD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Slobodan</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Golubović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">900</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5932</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Mitar</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Gavrilović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">600</td>
+                            <td style="border: 1px solid #000000; padding: 5px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">5953</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Persida</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Kosanović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">1100</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">6234</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marko</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Pavlović</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">1300</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">6789</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Janko</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Nikolić</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">800</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Табела ODELJENJE -->
+                <table style="border-collapse: collapse; align-self: flex-start;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">BROD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">IMEOD</th>
+                            <th style="border: 1px solid #000000; padding: 5px; text-align: left;">MESTO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">50</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Skladišta</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Zemun</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">30</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Marketing</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Vračar</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">10</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Plasman</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Surčin</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">20</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Direkcija</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Grocka</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #000000; padding: 5px;">40</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Nabavka</td>
+                            <td style="border: 1px solid #000000; padding: 5px;">Barajevo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            Повезати упите и њихова значења уписом броја датог испред описа значења упита на одговарајућу линију:`,
+            left: [
+                `<div style="font-family: monospace; font-size: 13px; font-weight: bold; line-height: 1.4; text-align: left;">
+                    <span style="color: #2563eb;">SELECT</span> odeljenje.imeod, radnik.prezime<br>
+                    <span style="color: #2563eb;">FROM</span> odeljenje <span style="color: #9ca3af;">LEFT JOIN</span> radnik<br>
+                    <span style="color: #2563eb;">ON</span> radnik.brod = odeljenje.brod<br>
+                    <span style="color: #2563eb;">WHERE</span> radnik.brod <span style="color: #2563eb;">IS NULL</span>
+                </div>`,
+                `<div style="font-family: monospace; font-size: 13px; font-weight: bold; line-height: 1.4; text-align: left;">
+                    <span style="color: #2563eb;">SELECT</span> odeljenje.imeod, radnik.prezime<br>
+                    <span style="color: #2563eb;">FROM</span> odeljenje <span style="color: #9ca3af;">FULL JOIN</span> radnik<br>
+                    <span style="color: #2563eb;">ON</span> radnik.brod = odeljenje.brod
+                </div>`,
+                `<div style="font-family: monospace; font-size: 13px; font-weight: bold; line-height: 1.4; text-align: left;">
+                    <span style="color: #2563eb;">SELECT</span> odeljenje.imeod, radnik.prezime<br>
+                    <span style="color: #2563eb;">FROM</span> odeljenje <span style="color: #9ca3af;">RIGHT JOIN</span> radnik<br>
+                    <span style="color: #2563eb;">ON</span> radnik.brod = odeljenje.brod<br>
+                    <span style="color: #2563eb;">WHERE</span> odeljenje.brod <span style="color: #2563eb;">IS NULL</span>
+                </div>`
+            ],
+            right: [
+                "1. Приказује само раднике који нису распоређени у одељења",
+                "3. Приказује сва одељења - и она у којима има и оне у којима нема радника и све раднике - и оне који су распоређени у одељења, као и оне који нису распоређени",
+                "4. Приказује само одељења у којима нема радника"
+            ],
+            correctPairs: { 0: 2, 1: 1, 2: 0 }, // Први упит спаја са значењем 4, Други са значењем 3, Трећи са значењем 1
+            points: 3
+        },
+                {
+            type: "matching",
+            text: `256. На левој страни су наведене категорије SQL команди, а са десне су набројане команде. На линију испред команде уписати број под којим је наведена категорија којој команда припада:`,
+            left: [
+                "1. DDL – Data Definition Language",
+                "2. DML – Data Manipulation Language",
+                "3. DCL – Data Control Language",
+                "4. TCL – Transaction Control Language"
+            ],
+            right: [
+                "GRANT",
+                "UPDATE",
+                "COMMIT",
+                "DROP",
+                "DELETE",
+                "ALTER"
+            ],
+            // GRANT(3), UPDATE(2), COMMIT(4), DROP(1), DELETE(2), ALTER(1)
+            correctPairs: { 0: 3, 0: 5, 1: 1, 1: 4, 2: 0, 3: 2 }, 
+            points: 3
+        },
+                {
+            type: "matching",
+            text: `257. Табела <strong>ZAPOSLENI</strong> је креирана и попуњена извршавањем следећих наредби:<br>
+            <div style="background-color: #ffffff; padding: 10px; font-family: monospace; font-size: 14px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; white-space: pre-wrap; margin-left: 20px;">
+<span style="color: #2563eb;">create TABLE</span> zaposleni(<br>  id <span style="color: #2563eb;">INTEGER</span> <span style="color: #ec4899;">NOT NULL</span> <span style="color: #2563eb;">PRIMARY KEY</span>, rukovodilacId <span style="color: #2563eb;">INTEGER</span>, ime <span style="color: #2563eb;">VARCHAR</span>(30) <span style="color: #ec4899;">NOT NULL</span>,<br>  <span style="color: #2563eb;">FOREIGN KEY</span> (rukovodilacId) <span style="color: #2563eb;">REFERENCES</span> zaposleni(id))<br><br><span style="color: #2563eb;">INSERT INTO</span> zaposleni <span style="color: #2563eb;">VALUES</span>(1, <span style="color: #ec4899;">NULL</span>, <span style="color: #ec4899;">'Petar'</span>);<br><span style="color: #2563eb;">INSERT INTO</span> zaposleni <span style="color: #2563eb;">VALUES</span>(2, 1, <span style="color: #ec4899;">'Mihajlo'</span>);<br><span style="color: #2563eb;">INSERT INTO</span> zaposleni <span style="color: #2563eb;">VALUES</span>(3, 2, <span style="color: #ec4899;">'Milica'</span>);<br><span style="color: #2563eb;">INSERT INTO</span> zaposleni <span style="color: #2563eb;">VALUES</span>(4, 3, <span style="color: #ec4899;">'Lazar'</span>);<br><span style="color: #2563eb;">INSERT INTO</span> zaposleni <span style="color: #2563eb;">VALUES</span>(5, <span style="color: #ec4899;">NULL</span>, <span style="color: #ec4899;">'Sofija'</span>);
+            </div>
+            Очекивани ефекти извршења упита нумерисани су бројевима од 1 до 5. Уносом редног броја одговарајућег описа на предвиђену линију испред упита, повезати упит и опис резултата његовог извршења:`,
+            left: [
+                `<div style="font-family: monospace; font-size: 13px; font-weight: bold; line-height: 1.4; text-align: left;">
+                    <span style="color: #2563eb;">select</span> * <span style="color: #2563eb;">from</span> zaposleni<br>
+                    <span style="color: #2563eb;">where</span> id <span style="color: #2563eb;">not in</span> (<span style="color: #2563eb;">select distinct</span> rukovodilacId <span style="color: #2563eb;">from</span> zaposleni)
+                </div>`,
+                `<div style="font-family: monospace; font-size: 13px; font-weight: bold; line-height: 1.4; text-align: left;">
+                    <span style="color: #2563eb;">select</span> * <span style="color: #2563eb;">from</span> zaposleni<br>
+                    <span style="color: #2563eb;">where</span> id <span style="color: #2563eb;">not in</span><br>
+                    (<span style="color: #2563eb;">select</span> rukovodilacId <span style="color: #2563eb;">from</span> zaposleni <span style="color: #2563eb;">where</span> rukovodilacId <span style="color: #ec4899;">is not null</span>)
+                </div>`,
+                `<div style="font-family: monospace; font-size: 13px; font-weight: bold; line-height: 1.4; text-align: left;">
+                    <span style="color: #2563eb;">select</span> * <span style="color: #2563eb;">from</span> zaposleni <span style="color: #2563eb;">where</span> rukovodilacId <span style="color: #ec4899;">is null</span>
+                </div>`
+            ],
+            right: [
+                "1. Сви радници који су руководиоци неком другом раднику",
+                "2. Сви радници који нису руководиоци ником",
+                "3. Сви радници који немају надређене руководиоце",
+                "4. Сви радници који имају надређеног руководиоца",
+                "5. Празна табела"
+            ],
+            // Први упит даје Празну табелу (5), Други упит даје Сви радници који нису... (2), Трећи даје Сви радници који немају... (3)
+            correctPairs: { 0: 4, 1: 1, 2: 2 }, 
+            points: 3
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ],
+    veb: [
+        {
+            type: "choice",
+            text: "161. Заокружити број испред исказа који тачно дефинише појам веб сајта:",
+            options: [
+                "1.  скуп протокола за отпремање и преузимање података са интернета, као и протоколи за комуникацију на интернету",
+                "2.  скуп веб-страница које могу да садрже текст, слике, видео снимке и други мултимедијални садржај састављен у једну целину",
+                "3.  веб сајт чини интернет прегледач - програм који се користи за читање хипертекст докумената",
+                "4.  интернет сервис (www) који омогућава корисницима размену докумената која се састоје од текста, слика и мултимедијалних компоненти"
+            ],
+            correct: 1, // Индекс 1 је други одговор (скруп веб-страница...)
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "162. Заокружити број испред тачног одговора.<br>Основни протокол који користи веб сервер је:",
+            options: [
+                "1.  SMTP",
+                "2.  HTTP",
+                "3.  HTML",
+                "4.  WWW"
+            ],
+            correct: 1, // Индекс 1 је други одговор (HTTP)
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "163. Заокружити број испред тачног одговора. Која је основна улога CSS-а (Cascading Style Sheet):",
+            options: [
+                "1.  Дефинише структуру и садржај странице",
+                "2.  Дефинише конкретан изглед елемената странице",
+                "3.  Дефинише којим језиком веб сервер извршава динамичку веб страницу",
+                "4.  Дефинише протокол за приступ одређеној веб страници"
+            ],
+            correct: 1, // Индекс 1 је други одговор (Дефинише конкретан изглед...)
+            points: 1
+        },
+        {
+            type: "choice",
+            text: `164. Заокружити број испред тачног одговора.<br>Унутар HTML странице, CSS правила се креирају навођењем селектора елемента, својстава и вредности. Како се дефинишу <strong>селектори</strong> HTML елемента:`,
+            options: [
+                "1.  Селектори се дефинишу искључиво на основу имена HTML елемента",
+                "2.  Селектори се дефинишу на основу имена елемента, назива класе или идентификатора елемента",
+                "3.  Селектори се дефинишу на основу атрибута сваког HTML елемента",
+                `4.  Селектори се дефинишу коришћењем кључне речи <span style="font-family: monospace; font-weight: bold; color: #2563eb;">selector</span> и атрибута`
+            ],
+            correct: 1, // Индекс 1 је други одговор (Селектори се дефинишу на основу имена...)
+            points: 1
+        },
+                {
+            type: "choice",
+            text: `165. Заокружити број испред тачног одговора.<br>Дефинисан је стил елемента у оквиру кога се налази позадинска слика. Коју вредност својство <span style="font-family: monospace; font-weight: bold; color: #ec4899;">background-repeat</span> треба да има уколико слика не треба да се понавља у оквиру елемента:`,
+            options: [
+                "1.  background-repeat: fixed;",
+                "2.  background-repeat: null;",
+                "3.  background-repeat: no-repeat;",
+                "4.  background-repeat: repeat-x;"
+            ],
+            correct: 2, // Индекс 2 је трећи одговор (no-repeat)
+            points: 1
+        },
+        {
+            type: "choice",
+            text: `166. Заокружити број испред тачног одговора.<br>Селектором <span style="font-family: monospace; font-weight: bold; color: #2563eb;">a:visited</span> омогућава се стилизовање:`,
+            options: [
+                "1.  активног линка",
+                "2.  посећеног линка",
+                "3.  линка када се преко њега пређе мишем",
+                "4.  елемента са називом класе: а"
+            ],
+            correct: 1, // Индекс 1 је други одговор (посећеног линка)
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "167. Заокружити број испред тачног одговора.<br>Које од понуђених својстава омогућава постизање ефекта слојевитости елемената у оквиру HTML стране?",
+            options: [
+                "1.  Својство overlap",
+                "2.  Својство layer",
+                "3.  Својство z-index",
+                "4.  Не постоји решење за постизање слојевитости елемената HTML стране"
+            ],
+            correct: 2, // Индекс 2 је трећи одговор (z-index)
+            points: 1
+        },
+        {
+            type: "choice",
+            text: `168. Заокружити број испред тачног одговора.<br>Анализирати следећи HTML код и одабрати која од понуђених опција описује резултат приказа HTML кода:<br><br>
+            <div style="background-color: #ffffff; padding: 8px 12px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 20px; margin-left: 20px; border-left: 3px solid #d1d5db;">
+                <span style="color: #2563eb;">&lt;b&gt;&lt;i&gt;</span> Maturski ispit <span style="color: #2563eb;">&lt;/i&gt;&lt;/b&gt;</span>
+            </div>`,
+            options: [
+                "1.  Текст ће бити само подебљан",
+                "2.  Текст ће бити само искошен",
+                "3.  Текст ће бити исписан подебљано и искошено",
+                "4.  Неће се применити никакав ефекат на текст"
+            ],
+            correct: 2, // Индекс 2 је трећи одговор
+            points: 1
+        },
+        {
+            type: "choice",
+            text: `169. Заокружити број испред линије кода којом се у HTML страницу укључује екстерна CSS датотека <strong>style.css</strong> са циљем дефинисања изгледа елемената дате странице:`,
+            options: [
+                "1.  &lt;style type='text/css'&gt;....&lt;/style&gt;",
+                "2.  &lt;link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/&gt;",
+                "3.  &lt;body style=\"background-color:red;\"&gt;...&lt;/body&gt;",
+                "4.  &lt;a href=\" style.css \"&gt;CSS датотека&lt;/a&gt;"
+            ],
+            correct: 1, // Индекс 1 је други одговор (link таг)
+            points: 2
+        },
+                {
+            type: "choice",
+            text: "170. Заокружити број испред тачног одговора. Који је од наведених начина за укључивање CSS стила најпогоднији за стилизовање, а посебно за касније одржавање и ажурирање HTML странице:",
+            options: [
+                "1.  Увежена екстерна CSS датотека преко хипервезе у заглављу HTML веб странице - External Style Sheet",
+                "2.  Дефинисан интерни CSS стил у оквиру head секције <style type=\"text/css\">...</style> - Internal Style Sheet",
+                "3.  Дефинисан стил у оквиру елемента HTML стране - Inline style",
+                "4.  Не постоји решење за укључивање CSS стила у стилизовање HTML странице"
+            ],
+            correct: 0, // Индекс 0 је први одговор
+            points: 2
+        },
+        {
+            type: "choice",
+            text: `171. Заокружити број испред тачног одговора.<br><br>Дефинисан је HTML елемент:<br>
+            <div style="background-color: #ffffff; padding: 5px 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; white-space: pre-wrap; margin-left: 20px;">
+                <span style="color: #2563eb;">&lt;div</span> <span style="color: #2563eb;">id</span>=<span style="color: #ec4899;">"container"</span><span style="color: #2563eb;">&gt;</span> Maturski ispit - EIT<span style="color: #2563eb;">&lt;/div&gt;</span>
+            </div>
+            Које CSS правило дефинише стил за дати елемент:<br><br>
+            
+            <div style="font-family: monospace; font-size: 14px; font-weight: bold; line-height: 1.5; margin-left: 20px;">
+                <!-- Опција 1 -->
+                <strong>1.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    container {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;font-size: 1.5em;<br>
+                    }
+                </div>
+
+                <!-- Опција 2 -->
+                <strong>2.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px; color: #2563eb;">
+                    #container <span style="color: #111827;">{</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #ec4899;">font-size:</span> 1.5em;<br>
+                    <span style="color: #111827;">}</span>
+                </div>
+
+                <!-- Опција 3 -->
+                <strong>3.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    .container {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;font-size: 1.5em;<br>
+                    }
+                </div>
+
+                <!-- Опција 4 -->
+                <strong>4.</strong><br>
+                <div style="margin-left: 20px; margin-bottom: 15px;">
+                    selector container {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;font-size: 1.5em;<br>
+                    }
+                </div>
+            </div>`,
+            options: [
+                "Правило под бројем 1",
+                "Правило под бројем 2",
+                "Правило под бројем 3",
+                "Правило под бројем 4"
+            ],
+            correct: 1, // Индекс 1 је друго правило (#container)
+            points: 2
+        },
+        {
+            type: "choice",
+            text: `172. Заокружити број испред тачног одговора.<br>Уколико је стил једног <strong>DIV</strong> елемента дефинисан са три класе <em>blue, black</em> и <em>top</em>, заокружити линију кода којом је елемент исправно дефинисан у оквиру HTML стране:<br><br>
+            
+            <div style="font-family: monospace; font-size: 14px; font-weight: bold; line-height: 1.5; margin-left: 20px;">
+                <!-- Опција 1 -->
+                <strong>1.</strong> <span style="color: #2563eb;">&lt;div</span> <span style="color: #2563eb;">id</span>=<span style="color: #ec4899;">"blue black top"</span><span style="color: #2563eb;">&gt;</span>Maturski ispit -EIT<span style="color: #2563eb;">&lt;/div&gt;</span><br><br>
+                <!-- Опција 2 -->
+                <strong>2.</strong> <span style="color: #2563eb;">&lt;div</span> <span style="color: #2563eb;">id</span>=<span style="color: #ec4899;">"blue"</span> <span style="color: #2563eb;">class</span>=<span style="color: #ec4899;">"black"</span> <span style="color: #2563eb;">class</span>=<span style="color: #ec4899;">"top"</span><span style="color: #2563eb;">&gt;</span>Maturski ispit -EIT<span style="color: #2563eb;">&lt;/div&gt;</span><br><br>
+                <!-- Опција 3 -->
+                <strong>3.</strong> <span style="color: #2563eb;">&lt;div</span> <span style="color: #2563eb;">class</span>=<span style="color: #ec4899;">"blue"</span> <span style="color: #2563eb;">class</span>=<span style="color: #ec4899;">"black"</span> <span style="color: #2563eb;">class</span>=<span style="color: #ec4899;">"top"</span><span style="color: #2563eb;">&gt;</span>Maturski ispit -EIT<span style="color: #2563eb;">&lt;/div&gt;</span><br><br>
+                <!-- Опција 4 -->
+                <strong>4.</strong> <span style="color: #2563eb;">&lt;div</span> <span style="color: #2563eb;">class</span>=<span style="color: #ec4899;">"blue black top"</span><span style="color: #2563eb;">&gt;</span>Maturski ispit -EIT<span style="color: #2563eb;">&lt;/div&gt;</span>
+            </div>`,
+            options: [
+                "Линија под бројем 1",
+                "Линија под бројем 2",
+                "Линија под бројем 3",
+                "Линија под бројем 4"
+            ],
+            correct: 3, // Индекс 3 је четврта линија (class="blue black top")
+            points: 2
+        },
+                {
+            type: "choice",
+            text: `173. Заокружити број испред тачног одговора.<br>Дато је својство и додељена му је вредност:<br>
+            <div style="background-color: #ffffff; padding: 5px 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; text-align: left; margin-left: 20px;">
+                <span style="color: #ec4899;">background-attachment:</span> fixed;
+            </div>
+            Закључити који од понуђених исказа описује дефинисани стил елемента са позадинском сликом:`,
+            options: [
+                "1.  Позадинска слика се помера са остатком садржаја на страни",
+                "2.  Позадинска слика се не понавља у оквиру елемента",
+                "3.  Позадинска слика је непомична (фиксирана) у односу на остатак садржаја",
+                "4.  Позадинска слика се понавља унутар елемента"
+            ],
+            correct: 2, // Индекс 2 је трећи одговор (непомична/фиксирана)
+            points: 2
+        },
+        {
+            type: "choice",
+            text: `174. Заокружити број испред траженог одговора.<br>Дат је следећи код који стилизује три елемента странице различитим позадинским бојама:<br><br>
+            
+            <div style="background-color: #ffffff; padding: 12px; font-family: monospace; font-size: 14px; font-weight: bold; margin-bottom: 20px; line-height: 1.4; white-space: pre-wrap; margin-left: 20px; border-left: 3px solid #d1d5db;">
+<span style="color: #2563eb;">&lt;div</span> <span style="color: #2563eb;">style</span>=<span style="color: #ec4899;">"background-color:red;</span><br><span style="color: #ec4899;">            width:300px;</span><br><span style="color: #ec4899;">            height:100px;</span><br><span style="color: #ec4899;">            position:relative;</span><br><span style="color: #ec4899;">            top:10px;</span><br><span style="color: #ec4899;">            left:80px;</span><br><span style="color: #ec4899;">            z-index:2;"</span><span style="color: #2563eb;">&gt;</span><br><span style="color: #2563eb;">&lt;/div&gt;</span><br>
+<span style="color: #2563eb;">&lt;div</span> <span style="color: #2563eb;">style</span>=<span style="color: #ec4899;">"background-color:yellow;</span><br><span style="color: #ec4899;">            width:300px;</span><br><span style="color: #ec4899;">            height:100px;</span><br><span style="color: #ec4899;">            position:relative;</span><br><span style="color: #ec4899;">            top:-60px;</span><br><span style="color: #ec4899;">            left:35px;</span><br><span style="color: #ec4899;">            z-index:1;"</span><span style="color: #2563eb;">&gt;</span><br><span style="color: #2563eb;">&lt;/div&gt;</span><br>
+<span style="color: #2563eb;">&lt;div</span> <span style="color: #2563eb;">style</span>=<span style="color: #ec4899;">"background-color:green;</span><br><span style="color: #ec4899;">            width:300px;</span><br><span style="color: #ec4899;">            height:100px;</span><br><span style="color: #ec4899;">            position:relative;</span><br><span style="color: #ec4899;">            top:-220px;</span><br><span style="color: #ec4899;">            left:120px;</span><br><span style="color: #ec4899;">            z-index:3;"</span><span style="color: #2563eb;">&gt;</span><br><span style="color: #2563eb;">&lt;/div&gt;</span>
+            </div>
+            Проценити шта од понуђеног описује ефекат извршења горњег кода:`,
+            options: [
+                "1.  Слој са зеленом позадином је на врху и преклапа остале слојеве",
+                "2.  Слој са жутом позадином је на врху и преклапа остале слојеве",
+                "3.  Слој са црвеном позадином је на врху и преклапа остале слојеве",
+                "4.  Слојеви се утапају у једну боју – нијансу смеђе"
+            ],
+            correct: 0, // Индекс 0 је први одговор (зелени има највећи z-index: 3)
+            points: 2
+        },
+
+                {
+            type: "multiple",
+            text: `У следећим задацима заокружите бројеве испред тражених одговора<br><br>
+            175. Заокружите тачне исказе. Интернет је:`,
+            options: [
+                "1.  Интернет је светски систем умрежених рачунарских мрежа",
+                "2.  Софтвер за преглед и приказ www страница се сматра Интернетом",
+                "3.  Подаци који „путују” светском мрежом и скуп корисника заједно чине Интернет мрежу",
+                "4.  Интернет чини њена хардверска компонента као и систем софтверских слојева који контролишу различите аспекте њене комуникационе инфраструктуре"
+            ],
+            correct: [0, 3], // Опције под бројем 1 и 4
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `176. Заокружити бројеве испред тражених одговора.<br>Шта од наведеног представља скуп специјализованих програма са функцијом веб сервера:`,
+            options: [
+                "1.  Microsoft Internet Information Services",
+                "2.  Microsoft SQL Server",
+                "3.  Apache Web Server",
+                "4.  Microsoft NT Server"
+            ],
+            correct: [0, 2], // Опције под бројем 1 и 3
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: `177. Међу понуђеним исказима заокружити оне који се односе на динамичке веб странице:`,
+            options: [
+                "1.  Могу приступити базама података",
+                "2.  Странице се састоје искључиво од HTML кода",
+                "3.  Динамичке странице се пишу у CSS језику",
+                "4.  Могу слати персонализован садржај појединачним корисницима",
+                "5.  Странице се извршавају на веб серверу, а резултат овог извршавања представља HTML код",
+                "6.  Ажурирање података на сајту је компликованије и спорије него код статичког сајта"
+            ],
+            correct: [0, 3, 4], // Опције под бројем 1, 4 и 5
+            points: 3
+        },
+        {
+            type: "multiple",
+            text: `178. Заокружити могуће начине укључивања CSS стила у оквиру HTML стране:`,
+            options: [
+                "1.  Увежена екстерна CSS датотека преко хипервезе у заглављу HTML веб странице - External Style Sheet",
+                "2.  Дефинисан екстерни CSS стил приказивања у прегледачу HTML страница – CSS plugin",
+                "3.  Дефинисан интерни CSS стил у оквиру head секције <style type=\"text/css\">...</style> - Internal Style Sheet",
+                "4.  Дефинисан стил у оквиру елемента HTML стране - Inline style",
+                "5.  Дефинисан стил на крају HTML стране изван head и body секције – Outline style",
+                "6.  Дефинисан CSS стил у оквиру секције body, унутар тага <css></css>"
+            ],
+            correct: [0, 2, 4], // Опције под бројем 1, 3 и 4
+            points: 3
+        },
+                {
+            type: "fill",
+            text: `179. Написати линију кода којом се укључује екстерна CSS датотека <strong>style.css</strong> у оквиру заглавља веб странице <strong>index.html</strong> (датотеке style.css и indeks.html се налазе у истом директоријуму):<br><br>____________`,
+            // Предвиђене све латиничне, ћириличне и падежне верзије уноса како год ученик уписао
+            correct: [
+                "<link rel=\"stylesheet\" href=\"style.css\">", 
+                "<link rel=\"stylesheet\" href=\"style.css\" />",
+                "<link rel='stylesheet' href='style.css'>",
+                "<link href=\"style.css\" rel=\"stylesheet\">"
+            ],
+            points: 3
+        },
+        {
+            type: "matching",
+            text: `180. Повезати појмове према захтеву.<br>Са леве стране су дати нумерисани HTML тагови, а са десне су наведени индикатори. На линију уписати број којим се HTML таг повезује са одговарајућим индикатором који ће се видети на HTML страници:`,
+            left: [
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;font color=<span style="color: #ec4899;">"#ff0003"</span>&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;b&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;h3&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;font size=<span style="color: #ec4899;">"3"</span>&gt;</span>`
+            ],
+            right: [
+                "приказ наслова трећег нивоа",
+                "приказ текста дате величине",
+                "приказ текста у боји",
+                "приказ подебљаног текста"
+            ],
+            // <font color> -> приказ текста у боји (2), <b> -> приказ подебљаног (3), <h3> -> приказ наслова (0), <font size> -> приказ дате величине (1)
+            correctPairs: { 0: 2, 1: 3, 2: 0, 3: 1 },
+            points: 1.5
+        },
+        {
+            type: "matching",
+            text: `181. Повезати појмове према захтеву.<br>Са леве стране су дати нумерисани HTML тагови, а са десне су наведени индикатори. На линију уписати број којим се HTML таг повезује са одговарајућим индикатором који ће се видети на HTML страници:`,
+            left: [
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;ol&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;li&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;body bgcolor=<span style="color: #ec4899;">"#ffff00"</span>&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;body background=<span style="color: #ec4899;">"0001.jpg"</span>&gt;</span>`
+            ],
+            right: [
+                "дефинисање елемента листе",
+                "постављање позадинске боје",
+                "постављање позадинске слике",
+                "дефинисање нумерисане листе"
+            ],
+            // <ol> -> дефинисање нумерисане (3), <li> -> елемент листе (0), bgcolor -> позадинска боја (1), background -> позадинска слика (2)
+            correctPairs: { 0: 3, 1: 0, 2: 1, 3: 2 },
+            points: 1.5
+        },
+        {
+            type: "matching",
+            text: `182. Повезати појмове према захтеву.<br>Са леве стране су дати нумерисани HTML тагови, а са десне су наведени индикатори. На линију уписати број којим се HTML таг повезује са одговарајућим индикатором који ће се видети на HTML страници:`,
+            left: [
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;tr&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;td&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;img src=<span style="color: #ec4899;">"slika.jpg"</span>&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;a href=<span style="color: #ec4899;">"index.html"</span>&gt;</span>`
+            ],
+            right: [
+                "Дефинисање хиперлинка",
+                "Нови ред у ћелији", // Задржан дослован оригинални текст грешке из збирке (треба Нови ред/Врста у табели)
+                "Нова ћелија у табели",
+                "Уметање слике"
+            ],
+            // <tr> -> Нови ред/врста у табели (1), <td> -> Нова ћелија (2), <img> -> Уметање слике (3), <a> -> Дефинисање хиперлинка (0)
+            correctPairs: { 0: 1, 1: 2, 2: 3, 3: 0 },
+            points: 1.5
+        },
+                {
+            type: "matching",
+            text: `183. Са леве стране су дати интернет сервиси, а са десне стране су дефинисане операције које се извршавају помоћу тих сервиса.<br><br>
+            На линију испред дефинисане операције написати број њему одговарајућег сервиса:`,
+            left: [
+                "1. E-mail",
+                "2. FTP",
+                "3. WWW",
+                "4. Telnet"
+            ],
+            right: [
+                "успостављање везе са удаљеним рачунаром и рад на њему",
+                "приказ HTML веб страница",
+                "слање електронске поште",
+                "пренос датотека са удаљеног сервера"
+            ],
+            // 1. E-mail -> слање (2), 2. FTP -> пренос (3), 3. WWW -> приказ (1), 4. Telnet -> успостављање (0)
+            correctPairs: { 0: 2, 1: 3, 2: 1, 3: 0 },
+            points: 2
+        },
+        {
+            type: "matching",
+            text: `184. Повезати појмове према захтеву.<br>HTML документ може да прими податке од корисника помоћу форми (формулара). Повежите дате тагове и атрибуте са њиховим дефиницијама:`,
+            left: [
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">1. FORM</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">2. INPUT</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">3. ACTION</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">4. METHOD</span>`
+            ],
+            right: [
+                "Дефинише где проследити податке са форме после предаје (submit) форме",
+                "Одређује начин на који се подаци са форме шаљу на дефинисано одредиште (може бити „post” или „get”)",
+                "Основни таг формулара са којим се креира формулар за унос података од стране корисника",
+                "Дефинише поље за унос података унутар HTML форме"
+            ],
+            // FORM -> Основни таг (2), INPUT -> Дефинише поље (3), ACTION -> Дефинише где (0), METHOD -> Одређује начин (1)
+            correctPairs: { 0: 2, 1: 3, 2: 0, 3: 1 },
+            points: 2
+        },
+        {
+            type: "matching",
+            text: `185. Направите редослед потребних корака за приказ статичке веб странице уносом редних бројева на линију испред описа корака, почев од броја 1 до броја 5.`,
+            left: [
+                "Корак 1",
+                "Корак 2",
+                "Корак 3",
+                "Корак 4",
+                "Корак 5"
+            ],
+            right: [
+                "Веб сервер шаље пронађену страну клијенту - веб претраживачу.",
+                "Корисник захтева да види веб страну (кликом на линк, укуцавањем адресе у адресну линију веб претраживача и слично)",
+                "Аутор је креирао страну која се састоји од HTML кода и ставио је на веб сервер.",
+                "Веб претраживач обрађује добијени HTML код и приказује кориснику уредно форматирану страницу са свим елементима (сликама, линковима, табелама, ...)",
+                "Веб сервер проналази HTML страну коју је корисник захтевао"
+            ],
+            // Редослед: Аутор креирао(1)->Корисник захтева(2)->Сервер проналази(3)->Сервер шаље(4)->Претраживач обрађује(5)
+            correctPairs: { 0: 2, 1: 1, 2: 4, 3: 0, 4: 3 },
+            points: 3
+        },
+                {
+            type: "matching",
+            text: `186. Одредите редослед потребних корака за приказ динамичке веб странице уносом редних бројева (почев од 1) на линији испред описа корака.`,
+            left: [
+                "Корак 1",
+                "Корак 2",
+                "Корак 3",
+                "Корак 4",
+                "Корак 5",
+                "Корак 6"
+            ],
+            right: [
+                "Веб претраживач обрађује добијени HTML код и приказује кориснику страницу са свим елементима.",
+                "Веб сервер извршава програмски код који је саставни део стране и креира HTML код.",
+                "Корисник креира захтев за преглед динамичке веб стране. Захтев се прослеђује од клијента (веб претраживача) до веб сервера на коме се налази захтевана страна.",
+                "Аутор је креирао страну која се састоји од серверских контрола и инструкција у неком програмском језику и ставио је на веб сервер.",
+                "Веб сервер обрађује захтев корисника и проналази динамичку страну коју је корисник захтевао.",
+                "Веб сервер шаље преко Интернета генерисани HTML код веб претраживачу."
+            ],
+            // Редослед: Аутор креирао(1) -> Корисник креира захтев(2) -> Сервер обрађује/проналази(3) -> Сервер извршава код(4) -> Сервер шаље(5) -> Претраживач обрађује(6)
+            correctPairs: { 0: 3, 1: 2, 2: 4, 3: 1, 4: 5, 5: 0 },
+            points: 3
+        },
+        {
+            type: "matching",
+            text: `187. Уредите појмове према захтеву.<br>Дат је низ HTML наредби. Уписивањем редног броја на предвиђену линију (почев од броја 1 до броја 6) поређајте тачним редоследом HTML наредбе у складу са основном структуром HTML странице:`,
+            left: [
+                "Корак 1",
+                "Корак 2",
+                "Корак 3",
+                "Корак 4",
+                "Корак 5",
+                "Корак 6"
+            ],
+            right: [
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;/body&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;head&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;/html&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;html&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;/head&gt;</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">&lt;body&gt;</span>`
+            ],
+            // Редослед: <html>(1) -> <head>(2) -> </head>(3) -> <body>(4) -> </body>(5) -> </html>(6)
+            correctPairs: { 0: 3, 1: 1, 2: 4, 3: 5, 4: 0, 5: 2 },
+            points: 3
+        },
+                {
+            type: "choice",
+            text: "188. Заокружити исказ који описује улогу Domain Name Server-а:",
+            options: [
+                "1.  превођење имена домена у IP адресу",
+                "2.  хостовање веб сајта",
+                "3.  вршење функције главног чвора у локалној рачунарској мрежи",
+                "4.  приказ динамичких веб страница"
+            ],
+            correct: 0, // Индекс 0 је први одговор
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "189. Једна од платформи за развој веб апликација развио је и Microsoft. Заокружити назив Microsoft-ове платформе за развој веб апликација:",
+            options: [
+                "1.  HTML",
+                "2.  JSP",
+                "3.  PHP",
+                "4.  ASP.NET"
+            ],
+            correct: 3, // Индекс 3 је четврти одговор
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "190. ASP.NET MVC 3.0 долази са новом техником за дефинисање погледа (View Engine). Заокружити назив ове технике:",
+            options: [
+                "1.  ASP.NET View Engine",
+                "2.  Salome",
+                "3.  Razor",
+                "4.  Default"
+            ],
+            correct: 2, // Индекс 2 је трећи одговор
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "191. Заокружити од понуђених опција који симбол се користи за коментаре у ASP.NET MVC Razor синтакси:",
+            options: [
+                "1.  //",
+                "2.  /* ... */",
+                "3.  <!-- ... -->",
+                "4.  @* ... *@"
+            ],
+            correct: 3, // Индекс 3 је четврти одговор
+            points: 1
+        },
+        {
+            type: "choice",
+            text: "192. SOAP протокол (Simple Object Access protocol) који се користи за размену података између рачунара коришћењем веб сервиса, у основи користи један скрипт језик. Заокруживањем редног броја, обележити о ком језику се ради:",
+            options: [
+                "1.  HTML",
+                "2.  CSS",
+                "3.  JavaScript",
+                "4.  XML"
+            ],
+            correct: 3, // Индекс 3 је четврти одговор
+            points: 1
+        },
+                {
+            type: "choice",
+            text: "193. Заокружити исказ који дефинише улогу Proxy сервера:",
+            options: [
+                "1.  Омогућава пренос датотека са удаљеног рачунара и ка удаљеном рачунару",
+                "2.  Побољшава перформансе конекције, филтрира захтеве и прослеђује их на прави сервер",
+                "3.  Пружа хостинг различитим медијским садржајима (Аудио, Видео)",
+                "4.  Хостује веб стране"
+            ],
+            correct: 1, // Индекс 1 је други одговор
+            points: 2
+        },
+        {
+            type: "choice",
+            text: "194. Заокружити исказ који допуњује опис понашања променљивих током извршења програма написаног у језику JavaScript. Током извршавања апликације написане у JavaScript-у:",
+            options: [
+                "1.  Није могуће мењати типове променљивих у току извршавања апликације",
+                "2.  Типови променљивих се могу мењати током извршавања програма",
+                "3.  Типови променљивих се обавезно мењају током извршавања апликације у одговарајући веб тип променљиве",
+                "4.  JavaScript не подржава типове променљивих"
+            ],
+            correct: 1, // Индекс 1 је други одговор
+            points: 2
+        },
+        {
+            type: "choice",
+            text: "195. Дата је ASP.NET MVC апликација у којој је креирана нова мастер страница (master layout page) која се зове <em>_Layout.WindowsPhone.cshtml</em>. Ако желимо да укључимо нову мастер страницу на новом погледу (View) који сегмент кода треба да искористимо. Заокружити тачан одговор:",
+            options: [
+                "1.  <span style=\"font-family: monospace; font-weight: bold;\">@Html.ActionLink(\"_Layout.WindowsPhone.cshtml\");</span>",
+                "2.  <span style=\"font-family: monospace; font-weight: bold;\">Layout = \"~/views/Shared/_Layout.WindowsPhone.cshtml\";</span>",
+                "3.  <span style=\"font-family: monospace; font-weight: bold;\">Layout = \"_Layout.WindowsPhone.cshtml\";</span>",
+                "4.  <span style=\"font-family: monospace; font-weight: bold;\">@Html.Partial(\"_Layout.WindowsPhone.cshtml\");</span>"
+            ],
+            correct: 1, // Индекс 1 је други одговор
+            points: 2
+        },
+        {
+            type: "choice",
+            text: "196. Заокружити један од понуђених типова сервиса који може бити хостoван у конзолној или десктоп апликацији:",
+            options: [
+                "1.  ASMX",
+                "2.  RESTful",
+                "3.  WCF",
+                "4.  XML"
+            ],
+            correct: 2, // Индекс 2 је трећи одговор
+            points: 2
+        },
+                {
+            type: "multiple",
+            text: `У следећим задацима заокружите бројеве испред тражених одговора<br><br>
+            197. Заокружите број испред назива скрипт језика за израду динамичких веб страница:`,
+            options: [
+                "1.  PHP",
+                "2.  jQuery",
+                "3.  ASP.NET",
+                "4.  JSP",
+                "5.  VBScript",
+                "6.  CSS",
+                "7.  HTML"
+            ],
+            correct: [0, 2, 3], // Индекси 0, 2 и 3 одговарају опцијама 1, 3 и 4
+            points: 1.5
+        },
+                {
+            type: "multiple",
+            text: "198. У клијентском скрипт језику JavaScript постоји неколико могућности конверзије стринга у број. Заокружити функције које омогућавају те конверзије:",
+            options: [
+                "1.  Није могуће мењати типове променљивих у току извршавања апликације",
+                "2.  Функција EVAL – процењује стринг и ако је могуће претвара га у број",
+                "3.  Функција parseInt – конвертује стринг у целобројни број, ако је могуће",
+                "4.  Функција parseFloat – конвертује стринг у реалан број, ако је могуће",
+                "5.  Функција parseDouble – конвертује стринг у реалан број, ако је могуће",
+                "6.  Функција tryParseInt – конвертује стринг у целобројни број, ако је могуће"
+            ],
+            correct: [1, 2, 3], // Опције 2, 3 и 4
+            points: 1.5
+        },
+        {
+            type: "multiple",
+            text: "199. Обележити шта од наведеног је дефинисано WSDL језиком (Web Services Description Language) (заокружити више понуђених одговора):",
+            options: [
+                "1.  Комуникациони интерфејс за веб сервис",
+                "2.  Начин имплементације метода веб сервиса",
+                "3.  Списак метода веб сервиса",
+                "4.  Комуникациони протокол за веб сервис"
+            ],
+            correct: [0, 2, 3], // Опције 1, 3 и 4
+            points: 2
+        },
+        {
+            type: "multiple",
+            text: "200. Microsoft .NET Framework садржи базне класе које пружају широк спектар могућности. Заокружити елементе који су укључени у .NET Framework:",
+            options: [
+                "1.  класе корисничког интерфејса",
+                "2.  класе за приступ подацима и базама",
+                "3.  класе корисника",
+                "4.  веб сервер и примере базе података",
+                "5.  класе за манипулацију XML докумената",
+                "6.  скрипт језик који се извршава на клијент страни"
+            ],
+            correct: [0, 1, 4], // Опције 1, 2 и 5
+            points: 3
+        },
+        {
+            type: "multiple",
+            text: "201. Повратне вредности акције MVC контролера (controller action method) могу бити различитих типова. Заокружити бројеве испред могућих повратних вредности:",
+            options: [
+                "1.  ViewResult",
+                "2.  MVCResult",
+                "3.  ModelResult",
+                "4.  JsonResult",
+                "5.  RedirectResult",
+                "6.  ASPResult"
+            ],
+            correct: [0, 3, 4], // Опције 1, 4 и 5
+            points: 3
+        },
+        {
+            type: "multiple",
+            text: "202. XML Schema (XSD) описује структуру XML документа. Обележити шта од наведеног дефинише XML Schema (заокружити више понуђених одговора):",
+            options: [
+                "1.  Типове података XML елемената и атрибута",
+                "2.  Вредности XML елемената и атрибута",
+                "3.  XML елементе који представљају child (деца) елементе",
+                "4.  Уређење child елемената",
+                "5.  Начин сортирања атрибута у оквиру елемената",
+                "6.  Међусобни однос корених (root) елемената документа"
+            ],
+            correct: [0, 2, 3], // Опције 1, 3 и 4
+            points: 3
+        },
+                {
+            type: "fill",
+            text: `203. Дата је MVC стандардна рута (default route):<br>
+            <div style="background-color: #ffffff; padding: 5px 10px; font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; text-align: left; margin-left: 20px;">
+                http://localhost/Customer/Details/5
+            </div>
+            која има 3 сегмента. Препознати на основу дате руте вредности ових сегмената и допунити реченицу:<br><br>
+            Име контролера (Controller Name) је: ____________, назив методе (Action Method Name) је: ____________ а ID параметра методе је дат са: ____________`,
+            correct: [
+                ["Customer", "customer", "Цустомер", "цустомер"], // Прво поље
+                ["Details", "details", "Детаилс", "детаилс"],    // Друго поље
+                ["5"]                                             // Треће поље
+            ],
+            points: 1.5
+        },
+
+                {
+            type: "matching",
+            text: `204. У JavaScript језику свака веб страница има објекте наведене у левој колони. На десној страни дати су описи наведених објеката. Повезати објекат са одговарајућим описом уносом редног броја којим је објекат нумерисан на означену линију:`,
+            left: [
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">1. window</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">2. location</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">3. history</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #2563eb;">4. document</span>`
+            ],
+            right: [
+                "садржи URL адресе које су претходно биле посећене, као и URL адресе које су посећене након посете тренутној страници",
+                "представља тренутно учитани документ и служи као приступна тачка садржају странице",
+                "садржи информације о URL адреси документа који је тренутно приказан у посматраном прозору",
+                "објекат највишег нивоа који садржи све друге објекте и представља прозор претраживача"
+            ],
+            // window -> прозор претраживача (3), location -> информације о URL адреси (2), history -> URL адресе које су претходно... (0), document -> тренутно учитани документ (1)
+            correctPairs: { 0: 3, 1: 2, 2: 0, 3: 1 },
+            points: 2
+        },
+        {
+            type: "matching",
+            text: `205. У JavaScript језику многи објекти имају уграђене функције (методе) које симулирају догађаје настале услед акција корисника. Уносом редног броја методе (лева колона) на предвиђену линију, повежите метод и одговарајућу акцију корисника.`,
+            left: [
+                `<span style="font-family: monospace; font-weight: bold; color: #ec4899;">1. focus</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #ec4899;">2. submit</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #ec4899;">3. load</span>`,
+                `<span style="font-family: monospace; font-weight: bold; color: #ec4899;">4. blur</span>`
+            ],
+            right: [
+                "Изађе из фокуса елемента форме",
+                "Учита страницу у прегледач",
+                "Уђе у фокус неког елемента форме",
+                "Изврши слање форме"
+            ],
+            // focus -> Уђе у фокус (2), submit -> Изврши слање форме (3), load -> Учита страницу (1), blur -> Изађе из фокуса (0)
+            correctPairs: { 0: 2, 1: 3, 2: 1, 3: 0 },
+            points: 2
+        },
+                {
+            type: "matching",
+            text: `206. Веб обрасци могу да садрже различите типове компоненти. Редни број под којим је наведена категорија компоненти уписати на линију испред одговарајуће групе компоненти веб образаца:`,
+            left: [
+                "1. HTML контроле",
+                "2. Контроле за податке",
+                "3. Серверске контроле",
+                "4. Системске компоненте"
+            ],
+            right: [
+                `<span style="font-family: monospace; font-size: 14px; font-weight: bold;">TextBox, Label, Button, ListBox, DropDownList, DataGrid</span>`,
+                `<span style="font-family: monospace; font-size: 14px; font-weight: bold;">FileSystemWatcher, EventLog, MessageQueue</span>`,
+                `<span style="font-family: monospace; font-size: 14px; font-weight: bold;">SqlConnection, SqlCommand, OleDbConnection</span>`,
+                `<span style="font-family: monospace; font-size: 14px; font-weight: bold;">Text Area, Table, Image, Submit Button, Reset Button</span>`
+            ],
+            // Серверске контроле (3) -> TextBox... (0), Системске компоненте (4) -> FileSystemWatcher... (1), Контроле за податке (2) -> SqlConnection... (2), HTML контроле (1) -> Text Area... (3)
+            correctPairs: { 0: 3, 1: 2, 2: 1, 3: 0 },
+            points: 4
+        },
+        {
+            type: "matching",
+            text: `207. Садашње верзије IIS сервера изграђене су на модуларној архитектури. Повежите називе модула са функцијама које обављају:`,
+            left: [
+                "1. HTTP модули",
+                "2. Безбедносни модули",
+                "3. Модули за евиденцију и дијагностику",
+                "4. Модули садржаја"
+            ],
+            right: [
+                "Модули за праћење и извештавање о догађајима насталим током процесирања захтева...",
+                "Модули за обраду захтева за статичке фајлове, враћање подразумеване странице када клијент не наведе ресурс у захтеву, излиставање садржаја директоријума...",
+                "Модули за одговорање на информације, враћање HTTP грешака, преусмеравање захтева...",
+                "Модули за ауторизацију УРЛ адреса, филтрирање захтева..."
+            ],
+            // Модули за евиденцију... (3) -> Модули за праћење... (0), Модули садржаја (4) -> Модули за обраду... (1), HTTP модули (1) -> Модули за одговорање... (2), Безбедносни модули (2) -> Модули за ауторизацију... (3)
+            correctPairs: { 0: 2, 1: 3, 2: 0, 3: 1 },
+            points: 4
+        }
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+    ]
+};
+
+
+let activeQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+
+// Lokalne varijable za držanje stanja spajanja parova
+let selectedLeftIndex = null;
+let currentMatches = {}; 
+
+// --- FUNKCIJA ZA RANDOM PITANJA ---
+// --- ИСПРАВЉЕНА ФУНКЦИЈА ЗА МЕШАЊЕ ПИТАЊА БЕЗ ГРЕШКЕ ---
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        // Тачна замена два елемента у низу
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// --- FUNKCIJA ZA POKRETANJE IZABRANOG KVIZA ---
+function startQuiz(subjectKey) {
+    activeQuestions = databases[subjectKey];
+    if (activeQuestions.length === 0) {
+        alert("Ova baza pitanja je trenutno prazna.");
+        return;
+    }
+    currentQuestionIndex = 0;
+    score = 0;
+    document.getElementById("score").innerText = score;
+    
+    document.getElementById("home-screen").style.display = "none";
+    document.getElementById("quiz-screen").style.display = "block";
+    
+    loadQuestion();
+}
+
+// --- FUNKCIJA ZA NASUMICNE BOJE
+const randomColors = [
+    { bg: "#e0f2fe", border: "#0284c7" }, // Plava
+    { bg: "#fef3c7", border: "#d97706" }, // Narandžasta
+    { bg: "#f3e8ff", border: "#7c3aed" }, // Ljubičasta
+    { bg: "#dcfce7", border: "#16a34a" }, // Zelena
+    { bg: "#fae8ff", border: "#c026d3" }  // Roze
+];
+
+// --- RENDERSTVO PITANJA ---
+function loadQuestion() {
+    const q = activeQuestions[currentQuestionIndex];
+    document.getElementById("progress").innerText = `Питање: ${currentQuestionIndex + 1}/${activeQuestions.length}`;
+    
+    document.getElementById("btn-submit").disabled = false;
+    document.getElementById("btn-next").disabled = true;
+
+    const contentArea = document.getElementById("quiz-content");
+    contentArea.innerHTML = "";
+
+    if (q.type === "choice") {
+        document.getElementById("question-text").innerHTML = q.text;
+        let html = `<div class="options-list">`;
+        q.options.forEach((opt, idx) => {
+            html += `
+                <label class="option-item" id="opt-label-${idx}">
+                    <input type="radio" name="quiz-opt" value="${idx}">
+                    <span>${opt}</span>
+                </label>
+            `;
+        });
+        html += `</div>`;
+        contentArea.innerHTML = html;
+
+    } else if (q.type === "multiple") {
+        document.getElementById("question-text").innerHTML = q.text;
+        let html = `<div class="options-list">`;
+        q.options.forEach((opt, idx) => {
+            html += `
+                <label class="option-item" id="opt-label-${idx}">
+                    <input type="checkbox" name="quiz-opt" value="${idx}">
+                    <span>${opt}</span>
+                </label>
+            `;
+        });
+        html += `</div>`;
+        contentArea.innerHTML = html;
+      } else if (q.type === "matching") {
+        document.getElementById("question-text").innerHTML = q.text;
+        selectedLeftIndex = null;
+        currentMatches = {};
+        
+        // Dodajemo dugme za brisanje izbora odmah iznad kolona
+        let html = `
+            <div style="margin-bottom: 15px; display: flex; justify-content: flex-start;">
+                <button id="btn-clear-matches" class="btn" style="padding: 6px 12px; font-size: 12px; margin: 0;" onclick="clearMatches()">Obriši izbore</button>
+            </div>
+        `;
+        
+        html += `<div class="matching-container">`;
+        html += `<div class="matching-column">`;
+        q.left.forEach((item, idx) => {
+            html += `<div class="match-item left-item" id="left-${idx}" onclick="selectLeft(${idx})">${item}</div>`;
+        });
+        html += `</div>`;
+
+        html += `<div class="matching-column">`;
+        q.right.forEach((item, idx) => {
+            html += `<div class="match-item right-item" id="right-${idx}" onclick="selectRight(${idx})">${item}</div>`;
+        });
+        html += `</div></div>`;
+        contentArea.innerHTML = html;
+
+        } else if (q.type === "fill") {
+        let textWithInputs = q.text;
+        // Проналазимо сваких 12 цртица и мењамо их у input поља: id="fill-input-0", id="fill-input-1"...
+        let inputCount = 0;
+        while (textWithInputs.includes("____________")) {
+            textWithInputs = textWithInputs.replace("____________", `<input type="text" id="fill-input-${inputCount}" class="fill-input" autocomplete="off" style="width: 110px; margin: 0 5px;">`);
+            inputCount++;
+        }
+        document.getElementById("question-text").innerHTML = textWithInputs;
+    }
+
+}
+
+// --- MEHANIKA ZA POVEZIVANJE STUBACA ---
+function selectLeft(idx) {
+    document.querySelectorAll('.left-item').forEach(el => el.classList.remove('selected'));
+    selectedLeftIndex = idx;
+    document.getElementById(`left-${idx}`).classList.add('selected');
+}
+
+// --- F
+function selectRight(rightIdx) {
+    if (selectedLeftIndex === null) {
+        alert("Prvo kliknite na pojam sa leve strane!");
+        return;
+    }
+    
+    // Ako je ova desna stavka već bila povezana, brišemo joj staru boju i spoj
+    for (let key in currentMatches) {
+        if (currentMatches[key] === rightIdx) {
+            const staroLevo = document.getElementById(`left-${key}`);
+            staroLevo.style.backgroundColor = "#ffffff";
+            staroLevo.style.borderColor = "#e5e7eb";
+            delete currentMatches[key];
+        }
+    }
+
+    // Pamćenje novog spoja
+    currentMatches[selectedLeftIndex] = rightIdx;
+
+    // Uzimamo nasumičnu boju iz niza na osnovu trenutnog broja spojeva
+    const colorIndex = Object.keys(currentMatches).length % randomColors.length;
+    const chosenColor = randomColors[colorIndex];
+
+    const leftEl = document.getElementById(`left-${selectedLeftIndex}`);
+    const rightEl = document.getElementById(`right-${rightIdx}`);
+    
+    leftEl.classList.remove('selected');
+    
+    // Bojenje levog i desnog elementa u istu nasumičnu boju
+    leftEl.style.backgroundColor = chosenColor.bg;
+    leftEl.style.borderColor = chosenColor.border;
+    
+    rightEl.style.backgroundColor = chosenColor.bg;
+    rightEl.style.borderColor = chosenColor.border;
+
+    selectedLeftIndex = null;
+}
+
+// --- FUNKCIJA ZA BRISANJE SVIH SPOJEVA ---
+function clearMatches() {
+    if (document.getElementById("btn-submit").disabled) return; // Ne dozvoljavaj brisanje ako je već potvrđeno
+    
+    selectedLeftIndex = null;
+    currentMatches = {};
+
+    // Vraćamo sve elemente u obe kolone na fabrički izgled
+    document.querySelectorAll('.match-item').forEach(el => {
+        el.classList.remove('selected');
+        el.style.backgroundColor = "#ffffff";
+        el.style.borderColor = "#e5e7eb";
+    });
+}
+
+// --- PROVERA ODGOVORA ---
+// --- ПРОВЕРА ОДГОВОРА (Комплетна функција са исправљеним бојењем) ---
+// --- ПРОВЕРА ОДГОВОРА (Унапређено насумично бојење за нетачно повезивање) ---
+function checkAnswer() {
+    const q = activeQuestions[currentQuestionIndex];
+    let is100PercentCorrect = false;
+
+    document.getElementById("btn-submit").disabled = true;
+    document.getElementById("btn-next").disabled = false;
+
+    if (q.type === "choice") {
+        const selected = document.querySelector('input[name="quiz-opt"]:checked');
+        const userAns = selected ? parseInt(selected.value) : null;
+        
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled'));
+
+        if (userAns === q.correct) {
+            is100PercentCorrect = true;
+            document.getElementById(`opt-label-${userAns}`).classList.add('correct-bg');
+        } else {
+            if (userAns !== null) {
+                document.getElementById(`opt-label-${userAns}`).classList.add('wrong-bg');
+            }
+            document.getElementById(`opt-label-${q.correct}`).classList.add('correct-bg');
+        }
+
+    } else if (q.type === "multiple") {
+        // Онемогућавамо даљи клик
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled'));
+        
+        // Скупљамо све индексе које је корисник чекирао
+        const checkedBoxes = document.querySelectorAll('input[name="quiz-opt"]:checked');
+        const userAnswers = Array.from(checkedBoxes).map(cb => parseInt(cb.value));
+        
+        let allCorrectChecked = true;
+        
+        // Пролазимо кроз све понуђене опције да бисмо их правилно обојили
+        q.options.forEach((_, idx) => {
+            const isCorrect = q.correct.includes(idx);
+            const isUserChecked = userAnswers.includes(idx);
+            const labelEl = document.getElementById(`opt-label-${idx}`);
+            
+            if (isCorrect) {
+                // Све што је заиста тачно бојимо у зелено
+                labelEl.classList.add('correct-bg');
+                if (!isUserChecked) {
+                    allCorrectChecked = false; // Корисник је пропустио тачан одговор
+                }
+            } else {
+                if (isUserChecked) {
+                    // Ако је чекирао нешто што није тачно, бојимо у црвено
+                    labelEl.classList.add('wrong-bg');
+                    allCorrectChecked = false; // Корисник је означио нетачан одговор
+                }
+            }
+        });
+        
+        if (allCorrectChecked) {
+            is100PercentCorrect = true;
+        }
+    }     else if (q.type === "matching") {
+        // 1. Онемогућавамо даљи клик и ПОТПУНО БРИШЕМО привремене боје корисника
+        document.querySelectorAll('.match-item').forEach(el => {
+            el.classList.add('disabled');
+            el.style.backgroundColor = ""; 
+            el.style.borderColor = "";     
+        });
+        
+        // Сакривамо дугме за брисање
+        const clearBtn = document.getElementById("btn-clear-matches");
+        if (clearBtn) clearBtn.style.display = "none";
+
+        let matchCorrect = true;
+
+        // 2. Проверавамо да ли су сви парови тачни
+        for (let lIdx in q.correctPairs) {
+            let rIdxCorrect = q.correctPairs[lIdx];
+            let rIdxUser = currentMatches[lIdx];
+
+            if (rIdxUser !== rIdxCorrect) {
+                matchCorrect = false;
+            }
+        }
+
+        if (matchCorrect) {
+            // Ако је СВЕ тачно, бојимо све у ЗЕЛЕНО
+            is100PercentCorrect = true;
+            document.querySelectorAll('.match-item').forEach(el => {
+                el.classList.add('correct-bg');
+            });
+        } else {
+            // Ако има ГРЕШАКА, прво враћамо оригинални текст на левој страни (ИСПРАВЉЕНО: innerHTML уместо innerText)
+            q.left.forEach((item, idx) => {
+                document.getElementById(`left-${idx}`).innerHTML = item;
+            });
+
+            // 3. ПОВЕЗИВАЊЕ ТАЧНИХ ОДГОВОРА ИСТОМ НАСУМИЧНОМ БОЈОМ
+            let colorIndex = 0;
+            for (let lIdx in q.correctPairs) {
+                let rIdxCorrect = q.correctPairs[lIdx];
+                
+                // Узимамо боју из вашег низа randomColors
+                const chosenColor = randomColors[colorIndex % randomColors.length];
+                
+                const leftEl = document.getElementById(`left-${lIdx}`);
+                const rightEl = document.getElementById(`right-${rIdxCorrect}`);
+                
+                // Додељујемо идентичну боју и левој и десној коцкици која чини тачан пар
+                leftEl.style.backgroundColor = chosenColor.bg;
+                leftEl.style.borderColor = chosenColor.border;
+                
+                rightEl.style.backgroundColor = chosenColor.bg;
+                rightEl.style.borderColor = chosenColor.border;
+                
+                colorIndex++;
+            }
+
+            // 4. ОЗНАЧАВАЊЕ ГРЕШАКА БЕЗ СКИДАЊА БОЈЕ (Додајемо само текстуални знак [X] у црвеној боји)
+            for (let lIdx in currentMatches) {
+                if (currentMatches[lIdx] !== q.correctPairs[lIdx]) {
+                    const pogresnoLevo = document.getElementById(`left-${lIdx}`);
+                    
+                    // Креирамо мали црвени маркер за грешку
+                    const errorBadge = document.createElement("span");
+                    errorBadge.style.color = "#ef4444";
+                    errorBadge.style.fontWeight = "bold";
+                    errorBadge.style.marginLeft = "10px";
+                    errorBadge.innerText = " [X]";
+                    
+                    // Додајемо га поред текста, док обојена позадина пара остаје нетакнута
+                    pogresnoLevo.appendChild(errorBadge);
+                }
+            }
+        }
+
+        } else if (q.type === "fill") {
+        let allFieldsCorrect = true;
+        
+        // Пошто у овом типу q.correct може бити низ низова (за више поља), пролазимо кроз сваки input
+        const isMultipleFields = Array.isArray(q.correct) && Array.isArray(q.correct[0]);
+        const fieldsToValidate = isMultipleFields ? q.correct.length : 1;
+
+        for (let i = 0; i < fieldsToValidate; i++) {
+            const inputField = document.getElementById(`fill-input-${i}`) || document.getElementById("fill-input-field");
+            if (!inputField) continue;
+            
+            const userAns = inputField.value.trim().toLowerCase();
+            inputField.disabled = true;
+
+            // Извлачимо дозвољене варијанте за тренутно поље
+            const allowedAnswers = isMultipleFields ? q.correct[i] : (Array.isArray(q.correct) ? q.correct : [q.correct]);
+            const normalizedAllowed = allowedAnswers.map(v => v.toString().toLowerCase());
+
+            if (normalizedAllowed.includes(userAns)) {
+                inputField.classList.add('correct-bg');
+            } else {
+                inputField.classList.add('wrong-bg');
+                allFieldsCorrect = false;
+                
+                // Приказ званичног тачног одговора поред поља
+                const correctSpan = document.createElement("span");
+                correctSpan.className = "correct-answer-text";
+                correctSpan.innerText = `(${allowedAnswers[0]})`;
+                inputField.parentNode.insertBefore(correctSpan, inputField.nextSibling);
+            }
+        }
+
+        if (allFieldsCorrect) {
+            is100PercentCorrect = true;
+        }
+    }
+
+
+    if (is100PercentCorrect) {
+        score += q.points ? q.points : 1; 
+        document.getElementById("score").innerText = score;
+    }
+}
+
+// --- SLEDEĆE PITANJE ILI FINIŠ ---
+// --- КОМПЛЕТНА ИСПРАВЉЕНА ФУНКЦИЈА ЗА СЛЕДЕЋЕ ПИТАЊЕ И КРАЈ ТЕСТА ---
+function nextQuestion() {
+    currentQuestionIndex++;
+    
+    // Ако има још питања, учитавамо следеће
+    if (currentQuestionIndex < activeQuestions.length) {
+        loadQuestion();
+    } else {
+        // --- ОВДЕ ПОЧИЊЕ КРАЈ КВИЗА ---
+        
+        // 1. Прво заустављамо тајмер ако га користите
+        if (typeof timerInterval !== 'undefined') clearInterval(timerInterval);
+        
+        // 2. САБИРАМО МАКСИМАЛНЕ ПОЕНЕ СВИХ ЗАДАТАКА ИЗ ИЗАБРАНЕ БАЗЕ
+        let maxScore = 0;
+        activeQuestions.forEach(q => {
+            maxScore += q.points ? q.points : 1; // Ако случајно нема points, рачуна се 1 поен као резерва
+        });
+
+        // 3. Рачунамо проценат успешности на основу стварног максималног броја бодова
+        const percentage = Math.round((score / maxScore) * 100);
+        const hasPassed = percentage >= 51; // Пролаз на 51% или више
+
+        // 4. Чистимо екран за приказ резултата
+        document.getElementById("quiz-content").innerHTML = "";
+        document.getElementById("btn-submit").style.display = "none";
+        
+        // Подешавамо велику сиву траку да прикаже главни статус
+        const textBar = document.getElementById("question-text");
+        textBar.style.textAlign = "center";
+        
+        if (hasPassed) {
+            textBar.style.backgroundColor = "#d1fae5"; // Светло зелена позадина за пролаз
+            textBar.style.borderColor = "#10b981";
+            textBar.innerText = "ТЕСТ ЈЕ ЗАВРШЕН! ПОЛОЖИЛИ СТЕ!";
+        } else {
+            textBar.style.backgroundColor = "#fee2e2"; // Светло црвена позадина за пад
+            textBar.style.borderColor = "#ef4444";
+            textBar.innerText = "ТЕСТ ЈЕ ЗАВРШЕН! НИСТЕ ПОЛОЖИЛИ!";
+        }
+
+        // 5. Убацујемо детаљну статистику бодова у садржај
+        let htmlText = `
+            <div style="text-align: center; padding: 20px; font-size: 18px; line-height: 1.8;">
+                Успешност: <strong>${percentage}%</strong><br>
+                Освојени бодови: <strong>${score}</strong> од укупно могућих <strong>${maxScore}</strong> бодова.<br><br>
+                ${hasPassed ? 'Честитамо! Спремни сте за полагање матуре.' : 'Препоручујемо да обновите градиво и покушате поново.'}
+            </div>
+        `;
+        document.getElementById("quiz-content").innerHTML = htmlText;
+        
+        // 6. Трансформишемо "Следеће" дугме у дугме за повратак на почетну страну
+        const nextBtn = document.getElementById("btn-next");
+        nextBtn.innerText = "Назад на почетну";
+        nextBtn.setAttribute("onclick", "resetToHome()");
+    }
+}
+
+
+// --- RESET I POVRATAK NA POČETAK ---
+function resetToHome() {
+    const nextBtn = document.getElementById("btn-next");
+    nextBtn.innerText = "Следеће";
+    nextBtn.setAttribute("onclick", "nextQuestion()");
+    document.getElementById("btn-submit").style.display = "inline-block";
+    
+    document.getElementById("question-text").className = "instruction-bar";
+    
+    document.getElementById("quiz-screen").style.display = "none";
+    document.getElementById("home-screen").style.display = "block";
+
+    window.location.href = "index.html";
+}
+
+// Ova funkcija se pokreće automatski čim se učita stranica kviz.html
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const izabraniPredmet = urlParams.get('predmet');
+    const ucitajRandom = urlParams.get('random') === 'true'; // Читамо да ли је корисник штиклирао насумични мод
+
+    if (izabraniPredmet && databases[izabraniPredmet]) {
+        // Узимамо изворна питања из изабране области
+        let pitanja = databases[izabraniPredmet];
+        
+        // АКО ЈЕ КОРИСНИК ОЗНАЧИО ЧЕКБОКС: Правимо копију низа и насумично мешамо редослед питања
+        if (ucitajRandom) {
+            pitanja = shuffleArray([...pitanja]);
+        }
+        
+        // Покрећемо квиз са спремним низом питања
+        activeQuestions = pitanja;
+        currentQuestionIndex = 0;
+        score = 0;
+        document.getElementById("score").innerText = score;
+        
+        // Покрећемо тајмер (ако га користите у коду)
+        if (typeof startTimer === 'function') startTimer(); 
+
+        loadQuestion();
+    } else {
+        // Ако неко отвори фајл без изабраног предмета, враћа га на почетну
+        window.location.href = "index.html";
+    }
+};
+
+
+    </script>
+</head>
+<body>
+
+    <!-- ======================================================== -->
+    <!-- POČETNI EKRAN (SKRIVA SE KADA IGRICA POČNE)              -->
+    <!-- ======================================================== -->
+    
+
+    <!-- ======================================================== -->
+    <!-- EKRAN KVIZA (PALE SE KROZ JAVASCRIPT)                   -->
+    <!-- ======================================================== -->
+    <div id="quiz-screen" class="container">
+        <div class="quiz-header">
+            <div id="progress" style="font-weight: bold;">Питање: 1/3</div>
+            <div class="score-box">Поени: <span id="score">0</span></div>
+        </div>
+
+        <div id="question-text" class="instruction-bar" style="text-align: left; text-transform: none; letter-spacing: normal;">Учитавање...</div>
+
+        <div id="quiz-content"></div>
+
+        <div class="actions">
+            <button id="btn-submit" class="btn" onclick="checkAnswer()">Потврди</button>
+            <button id="btn-next" class="btn" onclick="nextQuestion()" disabled>Следеће</button>
+        </div>
+    </div>
+  </body>
+</html>
+
+    

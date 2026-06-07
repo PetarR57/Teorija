@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kviz za maturu</title>
+    
+    <style>
+        /* Osnovno podešavanje stranice */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f9fafb; /* Blaga, svetlo siva pozadina za ceo ekran */
+            color: #111827;
+            margin: 0;
+            padding: 50px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Glavni kontejner koji simulira list papira sa testa */
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Suptilna senka oko papira */
+            border: 1px solid #e5e7eb;
+            padding: 40px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Glavni naslov */
+        h1 {
+            text-align: center;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: #000000;
+            font-weight: 800;
+        }
+
+        /* Siva traka za uputstvo - preslikana sa slike sa finijim ivicama */
+        .instruction-bar {
+            background-color: #d1d5db; 
+            padding: 14px 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-top: 3px solid #000000;
+            border-bottom: 3px solid #000000;
+            margin-bottom: 40px;
+        }
+
+        /* Lista predmeta */
+        .subjects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-top: 1px solid #000000; /* Gornja linija sekcije kao na testu */
+            padding-top: 25px;
+        }
+
+        /* Kartica predmeta sa simulacijom desne sive kolone sa slike */
+        .subject-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #000000;
+            overflow: hidden;
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Leva strana: Broj i naziv predmeta */
+        .subject-content {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            flex-grow: 1;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Stil za broj ispred predmeta */
+        .subject-number {
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+
+        /* Desna siva kolona koja imitira polje za bodove sa slike */
+        .subject-badge {
+            background-color: #e5e7eb;
+            width: 50px;
+            align-self: stretch;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            border-left: 1px solid #d1d5db;
+            color: #4b5563;
+            transition: all 0.2s ease;
+        }
+
+        /*--- INTERAKCIJA (HOVER EFEKTI) ---*/
+
+        /* Kada se miš pozicionira iznad kartice */
+        .subject-card:hover {
+            border-color: #9ca3af;
+            transform: translateY(-2px); /* Blago izdizanje kartice */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Tekst dobija žuti marker efekat (kao selekcija na slici) */
+        .subject-card:hover .subject-content {
+            background-color: #fef08a; /* Svetlo žuta boja markera */
+        }
+
+        /* Desni bedž potamni i tekst postane uočljiviji */
+        .subject-card:hover .subject-badge {
+            background-color: #d1d5db;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Glavni naslov kviza -->
+        <h1>Званична припрема за матурну</h1>
+
+        <!-- Siva traka sa uputstvom -->
+        <div class="instruction-bar">
+            У следећем кораку изаберите предмет за полагање теста
+        </div>
+
+        <!-- Lista predmeta -->
+        <!-- Deo HTML-a za početnu stranicu sa ispravnim dugmadima/karticama -->
+<div class="subjects-list">
+    
+    <!-- Ново поље за избор насумичног мода -->
+    <div style="margin-bottom: 20px; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px; padding-left: 10px;">
+        <input type="checkbox" id="mix-mode" style="transform: scale(1.4); cursor: pointer;">
+        <label for="mix-mode" style="cursor: pointer;">Измешај редослед питања (Насумични мод)</label>
+    </div>
+    
+    <!-- Измењене картице са onclick функцијом (НЕ са href линком) -->
+    <div class="subject-card" onclick="pokreniPredmet('programiranje')">
+        <div class="subject-content">
+            <span class="subject-number">01.</span>
+            <span class="subject-name">Програмирање</span>
+        </div>
+        <div class="subject-badge">»</div>
+    </div>
+
+    <div class="subject-card" onclick="pokreniPredmet('baze')">
+        <div class="subject-content">
+            <span class="subject-number">02.</span>
+            <span class="subject-name">Базе података</span>
+        </div>
+        <div class="subject-badge">»</div>
+    </div>
+
+    <div class="subject-card" onclick="pokreniPredmet('veb')">
+        <div class="subject-content">
+            <span class="subject-number">03.</span>
+            <span class="subject-name">Веб програмирање</span>
+        </div>
+        <div class="subject-badge">»</div>
+    </div>
+
+</div>
+
+
+
+    </div>
+
+    <script>
+function pokreniPredmet(imePredmeta) {
+    const isChecked = document.getElementById('mix-mode').checked;
+    // Преусмерава корисника и кроз URL шаље и назив предмета и информацију за мешање
+    window.location.href = `kviz.html?predmet=${imePredmeta}&random=${isChecked}`;
+}
+</script>
+
+</body>
+</html>
